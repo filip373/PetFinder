@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Example</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+    <body>
+        <h1>Exmaple</h1>
+        <b>Name:</b> <span th:text="${name}"></span>
+        <a th:href="@{/api/example?name={n}(n=${name})}">API</a>
+    </body>
+</html>
