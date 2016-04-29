@@ -22,10 +22,11 @@ public class UserService {
 	private UserRepository userRepository;
 
 	@Transactional
-	public void register(String login, String password, String repeatpassword, String email) throws LoginExistsException, EmailExistsException, InvalidEmailException{
-		if(isEmailAddressValid(email)){
-			if(verifyLogin(login) && verifyEmail(email)){
-				if(ifPasswordsMatch(password,repeatpassword)){
+	public void register(String login, String password, String repeatpassword, String email)
+			throws LoginExistsException, EmailExistsException, InvalidEmailException {
+		if (isEmailAddressValid(email)) {
+			if (verifyLogin(login) && verifyEmail(email)) {
+				if (ifPasswordsMatch(password, repeatpassword)) {
 					String passwordhash = hashPassword(password);
 					User user = new User(login, email, passwordhash);
 					userRepository.save(user);
@@ -33,54 +34,43 @@ public class UserService {
 			}
 		}
 	}
-	
-	private boolean ifPasswordsMatch(String password, String repeatpassword){
-		if(password.equals(repeatpassword)){
+
+	private boolean ifPasswordsMatch(String password, String repeatpassword) {
+		if (password.equals(repeatpassword)) {
 			return true;
 		}
 		return false;
 	}
-	
-	private  String hashPassword(String password) {
+
+	private String hashPassword(String password) {
 		String salt = BCrypt.gensalt(31);
 		String pw_hash = BCrypt.hashpw(password, salt);
 		return pw_hash;
 	}
-	
-	private boolean verifyLogin(String login) throws LoginExistsException{
-		boolean exists = false;
-		User user = null;
-		try{
-			 user = userRepository.findOneByLogin(login);
-			 throw new LoginExistsException();
-		} catch(Exception e){
-			if(user==null){
-				exists = true;
-			}
-		}
-		return exists;
-	}
-	
-	private boolean verifyEmail(String email) throws EmailExistsException {
-		boolean exists = false;
-		User user = null;
-		try{
-			 user = userRepository.findOneByEmail(email);
-			 throw new EmailExistsException();
-		} catch(Exception e){
-			if(user==null){
-				exists = true;
-			}
-		}
-		return exists;
-	}
-	
-	private boolean isEmailAddressValid(String email) throws InvalidEmailException
-	{
-		boolean valid = EmailValidator.getInstance().isValid(email);
-		if(valid){
+
+	private boolean verifyLogin(String login) throws LoginExistsException {
+		try {
+			userRepository.findOneByLogin(login);
+		} catch (Exception e) {
 			return true;
-		} else{
+		}
+		throw new LoginExistsException();
+	}
+
+	private boolean verifyEmail(String email) throws EmailExistsException {
+		try {
+			userRepository.findOneByEmail(email);
+		} catch (Exception e) {
+			return true;
+		}
+		throw new EmailExistsException();
+	}
+
+	private boolean isEmailAddressValid(String email) throws InvalidEmailException {
+		boolean valid = EmailValidator.getInstance().isValid(email);
+		if (valid) {
+			return true;
+		} else {
 			throw new InvalidEmailException();
 		}
 	}
