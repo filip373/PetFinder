@@ -22,7 +22,7 @@ public class UserRestController {
     @Autowired
     UserService userService;
 
-    @RequestMapping(value = "register", method = RequestMethod.POST)
+    @RequestMapping(value = "", method = RequestMethod.POST)
     public ResponseEntity<RestResponse> register(
             @RequestBody UserRegistrationForm data) {
         try {
