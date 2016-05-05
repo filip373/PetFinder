@@ -3,6 +3,7 @@ package com.petfinder.rest.controller;
 import com.petfinder.exception.EmailExistsException;
 import com.petfinder.exception.InvalidEmailException;
 import com.petfinder.exception.LoginExistsException;
+import com.petfinder.exception.PasswordsDoesNotMatchException;
 import com.petfinder.rest.domain.Status;
 import com.petfinder.rest.domain.UserRegistrationForm;
 import com.petfinder.service.UserService;
@@ -37,6 +38,9 @@ public class UserRestController {
                     HttpStatus.BAD_REQUEST);
         } catch (EmailExistsException e) {
             return new ResponseEntity<>(new Status("email exists"),
+                    HttpStatus.BAD_REQUEST);
+        } catch (PasswordsDoesNotMatchException e) {
+            return new ResponseEntity<>(new Status("passwords does not match"),
                     HttpStatus.BAD_REQUEST);
         }
     }
