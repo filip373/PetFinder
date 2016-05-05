@@ -4,7 +4,7 @@ import com.petfinder.exception.EmailExistsException;
 import com.petfinder.exception.InvalidEmailException;
 import com.petfinder.exception.LoginExistsException;
 import com.petfinder.exception.PasswordsDoesNotMatchException;
-import com.petfinder.rest.domain.Status;
+import com.petfinder.rest.domain.RestResponse;
 import com.petfinder.rest.domain.UserRegistrationForm;
 import com.petfinder.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,24 +23,29 @@ public class UserRestController {
     UserService userService;
 
     @RequestMapping(value = "register", method = RequestMethod.POST)
-    public ResponseEntity<Status> register(
+    public ResponseEntity<RestResponse> register(
             @RequestBody UserRegistrationForm data) {
         try {
             userService.register(data.getLogin(), data.getPassword(),
                     data.getRepeatPassword(), data.getEmail());
-            return new ResponseEntity<>(new Status("registered"),
+            return new ResponseEntity<>(new RestResponse("registered", data),
                     HttpStatus.CREATED);
         } catch (InvalidEmailException e) {
-            return new ResponseEntity<>(new Status("invalid email"),
+            return new ResponseEntity<>(
+                    new RestResponse(e.getMessage(), 1, "invalid email", data),
                     HttpStatus.BAD_REQUEST);
         } catch (LoginExistsException e) {
-            return new ResponseEntity<>(new Status("login exists"),
+            return new ResponseEntity<>(
+                    new RestResponse(e.getMessage(), 2, "login exists", data),
                     HttpStatus.BAD_REQUEST);
         } catch (EmailExistsException e) {
-            return new ResponseEntity<>(new Status("email exists"),
+            return new ResponseEntity<>(
+                    new RestResponse(e.getMessage(), 3, "email exists", data),
                     HttpStatus.BAD_REQUEST);
         } catch (PasswordsDoesNotMatchException e) {
-            return new ResponseEntity<>(new Status("passwords does not match"),
+            return new ResponseEntity<>(
+                    new RestResponse(e.getMessage(), 4,
+                            "passwords does not match", data),
                     HttpStatus.BAD_REQUEST);
         }
     }
