@@ -34,7 +34,9 @@ public class UserService {
 					User user = new User(login, email, passwordHash);
 					userRepository.save(user);
 				} else {
-                    throw new PasswordsDoesNotMatchException();
+                    throw new PasswordsDoesNotMatchException(
+                            "Passwords does not match."
+                    );
                 }
 			}
 		}
@@ -54,7 +56,9 @@ public class UserService {
 		} catch (Exception e) {
 			return true;
 		}
-		throw new LoginExistsException();
+		throw new LoginExistsException(
+                String.format("User '%s' already exists.", login)
+        );
 	}
 
 	private boolean verifyEmail(String email) throws EmailExistsException {
@@ -66,7 +70,9 @@ public class UserService {
 		} catch (Exception e) {
 			return true;
 		}
-		throw new EmailExistsException();
+		throw new EmailExistsException(
+                String.format("Email '%s' is already used.", email)
+        );
 	}
 
 	private boolean isEmailAddressValid(String email) throws InvalidEmailException {
@@ -74,7 +80,9 @@ public class UserService {
 		if (valid) {
 			return true;
 		} else {
-			throw new InvalidEmailException();
+			throw new InvalidEmailException(
+                    "Given email address is not valid."
+            );
 		}
 	}
 }
