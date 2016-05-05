@@ -3,6 +3,7 @@ package com.petfinder.service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import com.petfinder.exception.PasswordsDoesNotMatchException;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,35 +23,34 @@ public class UserService {
 	private UserRepository userRepository;
 
 	@Transactional
-	public void register(String login, String password, String repeatpassword, String email)
-			throws LoginExistsException, EmailExistsException, InvalidEmailException {
+	public void register(String login, String password, String repeatPassword,
+                         String email)
+            throws LoginExistsException, EmailExistsException,
+            InvalidEmailException, PasswordsDoesNotMatchException {
 		if (isEmailAddressValid(email)) {
 			if (verifyLogin(login) && verifyEmail(email)) {
-				if (ifPasswordsMatch(password, repeatpassword)) {
-					String passwordhash = hashPassword(password);
-					User user = new User(login, email, passwordhash);
+				if (password.equals(repeatPassword)) {
+					String passwordHash = hashPassword(password);
+					User user = new User(login, email, passwordHash);
 					userRepository.save(user);
-				}
+				} else {
+                    throw new PasswordsDoesNotMatchException();
+                }
 			}
 		}
 	}
 
-	private boolean ifPasswordsMatch(String password, String repeatpassword) {
-		if (password.equals(repeatpassword)) {
-			return true;
-		}
-		return false;
-	}
-
 	private String hashPassword(String password) {
 		String salt = BCrypt.gensalt(31);
-		String pw_hash = BCrypt.hashpw(password, salt);
-		return pw_hash;
+        return BCrypt.hashpw(password, salt);
 	}
 
 	private boolean verifyLogin(String login) throws LoginExistsException {
 		try {
-			userRepository.findOneByLogin(login);
+			User user = userRepository.findOneByLogin(login);
+			if (user == null) {
+                return true;
+            }
 		} catch (Exception e) {
 			return true;
 		}
@@ -59,7 +59,10 @@ public class UserService {
 
 	private boolean verifyEmail(String email) throws EmailExistsException {
 		try {
-			userRepository.findOneByEmail(email);
+			User user = userRepository.findOneByEmail(email);
+            if (user == null) {
+                return true;
+            }
 		} catch (Exception e) {
 			return true;
 		}
