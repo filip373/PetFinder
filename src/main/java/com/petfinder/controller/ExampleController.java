@@ -22,19 +22,7 @@ public class ExampleController {
 	@RequestMapping(value="{name}", method=RequestMethod.GET)
 	public String example(@PathVariable(value="name") String name, Model model) {
 		model.addAttribute("name", name);
-		
-		try {
-			userservice.register("damian", "kr", "kr", "ww@o2.pl");
-		} catch (LoginExistsException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (EmailExistsException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidEmailException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 		return "example";
 	}
 }
