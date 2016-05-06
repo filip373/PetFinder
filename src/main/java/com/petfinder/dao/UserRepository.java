@@ -11,11 +11,9 @@ import javax.transaction.Transactional;
 public interface UserRepository extends CrudRepository<User, Long>{
 
     @Transactional
-	@Query("SELECT u FROM User u where u.login=:login")
 	User findOneByLogin(@Param("login") String login);
 
     @Transactional
-    @Query("SELECT u FROM User u where u.email=:email")
 	User findOneByEmail(@Param("email") String email);
 
     @Transactional
