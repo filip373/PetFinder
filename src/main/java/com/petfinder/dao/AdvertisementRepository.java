@@ -22,27 +22,6 @@ public interface AdvertisementRepository
     List<Advertisement> findLatest(Pageable pageable);
 
     @Transactional
-    @Query("SELECT a FROM Advertisement a " +
-            "INNER JOIN advertisement_tags a_t " +
-            "ON a_t.advertisement_id = a.id " +
-            "INNER JOIN Tag t " +
-            "ON t.id = a_t.tag_id " +
-            "WHERE t IN :tags " +
-            "ORDER BY a.createdDate DESC")
-    List<Advertisement> findLatestInTags(@Param("tags") Collection<Tag> tags);
-
-    @Transactional
-    @Query("SELECT a FROM Advertisement a " +
-            "INNER JOIN advertisement_tags a_t " +
-            "ON a_t.advertisement_id = a.id " +
-            "INNER JOIN Tag t " +
-            "ON t.id = a_t.tag_id " +
-            "WHERE t IN :tags " +
-            "ORDER BY a.createdDate DESC")
-    List<Advertisement> findLatestInTags(@Param("tags") Collection<Tag> tags,
-                                         Pageable pageable);
-
-    @Transactional
     List<Advertisement> findByUser(User user);
 
     @Transactional
