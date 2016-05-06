@@ -1,6 +1,7 @@
 package com.petfinder.dao;
 
 import com.petfinder.domain.PetCategory;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 
@@ -14,5 +15,5 @@ public interface PetCategoryRepository
     List<PetCategory> findByName(String name);
 
     @Transactional
-    List<PetCategory> findByName(String name, Pageable pageable);
+    Page<PetCategory> findByName(String name, Pageable pageable);
 }
