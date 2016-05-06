@@ -4,12 +4,13 @@ import org.apache.log4j.Category;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "pets")
-public class Pet extends AbstractPersistable<Long> {
+public class Pet extends AbstractPersistable<Long> implements Serializable {
 
     @Column(name = "name", nullable = false)
     private String name;

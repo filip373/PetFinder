@@ -1,5 +1,6 @@
 package com.petfinder.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,7 +11,7 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 
 @Entity
 @Table(name="users")
-public class User extends AbstractPersistable<Long>{
+public class User extends AbstractPersistable<Long> implements Serializable {
    
 	@Column(name = "login", unique = true, nullable = false)
     private String login;

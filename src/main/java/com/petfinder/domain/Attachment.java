@@ -4,10 +4,12 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "attachments")
-public class Attachment extends AbstractPersistable<Long> {
+public class Attachment extends AbstractPersistable<Long>
+        implements Serializable {
 
     public enum Type {
         IMAGE, VIDEO

@@ -3,12 +3,14 @@ package com.petfinder.domain;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "locations")
-public class Location extends AbstractPersistable<Long> {
+public class Location extends AbstractPersistable<Long>
+        implements Serializable {
 
     @Column(name = "voivodership", nullable = false)
     private String voivodership;
