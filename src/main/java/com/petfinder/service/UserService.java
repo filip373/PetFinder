@@ -1,8 +1,5 @@
 package com.petfinder.service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import com.petfinder.exception.PasswordsDoesNotMatchException;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.mindrot.jbcrypt.BCrypt;
@@ -48,28 +45,20 @@ public class UserService {
 	}
 
 	private boolean verifyLogin(String login) throws LoginExistsException {
-		try {
-			User user = userRepository.findOneByLogin(login);
-			if (user == null) {
-                return true;
-            }
-		} catch (Exception e) {
-			return true;
-		}
+        Boolean exists = userRepository.existsByLogin(login);
+        if (!exists) {
+            return true;
+        }
 		throw new LoginExistsException(
                 String.format("User '%s' already exists.", login)
         );
 	}
 
 	private boolean verifyEmail(String email) throws EmailExistsException {
-		try {
-			User user = userRepository.findOneByEmail(email);
-            if (user == null) {
-                return true;
-            }
-		} catch (Exception e) {
-			return true;
-		}
+        Boolean exists = userRepository.existsByEmail(email);
+        if (!exists) {
+            return true;
+        }
 		throw new EmailExistsException(
                 String.format("Email '%s' is already used.", email)
         );
