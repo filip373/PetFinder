@@ -1,7 +1,8 @@
 package com.petfinder.domain;
 
-import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -27,24 +28,33 @@ public class User extends AbstractPersistable<Long>{
     private boolean isBanned;
 	
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "registration_date", nullable = false)
-    private Date registration_date;
+    @Column(name = "registrationDate", nullable = false)
+    private Date registrationDate;
     
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "last_login_date", nullable = true)
-    private Date last_login_date;
+    @Column(name = "lastLoginDate")
+    private Date lastLoginDate;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<Advertisement> advertisements;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
+    private List<Pet> pets;
+
 	public User() {
 		super();
 	}
-    public User(String login, String email, String password){
-    	Date date= new Date();	
 
+    public User(String login, String email, String password){
+        super();
     	this.login = login;
     	this.email=email;
     	this.password=password;
     	this.isBanned = false;
     	this.isActivated = false;
-    	this.registration_date = new Timestamp(date.getTime());
+    	this.registrationDate = new Date();
+        this.advertisements = new ArrayList<>();
+        this.pets = new ArrayList<>();
     }
 
 	public String getLogin() {
@@ -87,19 +97,47 @@ public class User extends AbstractPersistable<Long>{
 		this.isBanned = isBanned;
 	}
 
-	public Date getRegistration_date() {
-		return registration_date;
+	public Date getRegistrationDate() {
+		return registrationDate;
 	}
 
-	public void setRegistration_date(Date registration_date) {
-		this.registration_date = registration_date;
+	public void setRegistrationDate(Date registrationDate) {
+		this.registrationDate = registrationDate;
 	}
 
-	public Date getLast_login_date() {
-		return last_login_date;
+	public Date getLastLoginDate() {
+		return lastLoginDate;
 	}
 
-	public void setLast_login_date(Date last_login_date) {
-		this.last_login_date = last_login_date;
+	public void setLastLoginDate(Date lastLoginDate) {
+		this.lastLoginDate = lastLoginDate;
 	}
+
+    public List<Advertisement> getAdvertisements() {
+        return advertisements;
+    }
+
+    public void setAdvertisements(List<Advertisement> advertisements) {
+        this.advertisements = advertisements;
+    }
+
+    public List<Pet> getPets() {
+        return pets;
+    }
+
+    public void setPets(List<Pet> pets) {
+        this.pets = pets;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "User<#%d, login=%s, email=%s, isActivated=%b, isBanned=%b>",
+                getId(),
+                getLogin(),
+                getEmail(),
+                isActivated(),
+                isBanned()
+        );
+    }
 }
