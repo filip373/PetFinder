@@ -18,6 +18,9 @@ public class Advertisement extends AbstractPersistable<Long>
     @Column(name = "content", nullable = false)
     private String content;
 
+    @Column(name = "isDeleted", nullable = false)
+    private Boolean isDeleted = false;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "createdDate", nullable = false)
     private Date createdDate;
@@ -59,6 +62,7 @@ public class Advertisement extends AbstractPersistable<Long>
         super();
         this.title = title;
         this.content = content;
+        this.isDeleted = false;
         this.createdDate = new Date();
         this.lastEditedDate = null;
         this.user = user;
@@ -78,6 +82,14 @@ public class Advertisement extends AbstractPersistable<Long>
 
     public String getContent() {
         return content;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 
     public void setContent(String content) {

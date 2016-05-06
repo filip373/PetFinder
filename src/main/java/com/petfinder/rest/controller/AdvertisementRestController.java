@@ -4,6 +4,7 @@ import com.petfinder.domain.Advertisement;
 import com.petfinder.rest.domain.RestResponse;
 import com.petfinder.service.AdvertisementService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,7 @@ public class AdvertisementRestController {
                     HttpStatus.OK
             );
         } catch (Exception e) {
-            return new ResponseEntity<RestResponse>(
+            return new ResponseEntity<>(
                     new RestResponse(e.getMessage(), 1, "unexpected error"),
                     HttpStatus.BAD_REQUEST
             );
@@ -44,7 +45,7 @@ public class AdvertisementRestController {
                     HttpStatus.OK
             );
         } catch (Exception e) {
-            return new ResponseEntity<RestResponse>(
+            return new ResponseEntity<>(
                     new RestResponse(e.getMessage(), 1, "unexpected error"),
                     HttpStatus.BAD_REQUEST
             );

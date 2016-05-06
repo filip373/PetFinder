@@ -1,0 +1,65 @@
+{% extends 'template.twig' %}
+{% block title %}Latest advertisements{% endblock %}
+{% block content %}
+
+{% for ad in advertisements %}
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h4>{{ ad.getTitle }}</h4>
+            </div>
+            <div class="panel-footer small">
+                <strong>Date</strong>:
+                {{ ad.getCreatedDate | date('yyyy-MM-dd HH:mm') }} |
+
+                {% if ad.getUser %}
+                    <strong>Author</strong>: {{ ad.getUser }} |
+                {% endif %}
+
+                {% if ad.getTags %}
+                    <strong>Tags</strong>:
+                    {% for tag in ad.getTags %}
+                        <span class="label label-primary">#{{ tag.getName }}</span>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endfor %}
+{% if pages > 1 %}
+<nav class="center-block">
+    <ul class="pagination">
+        {% if page > 1 %}<li>
+            <a href="{{ '/latest/%d' | format(page - 1) | path }}"
+               aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>{% endif %}
+        {% if firstpage > 1 %}
+            <li><span aria-hidden="true">...</span></li>
+        {% endif %}
+        {% for p in printPages %}
+            {% if p == page %}
+                <li class="active">
+                    <a href="{{ '/latest/%d' | format(p) | path }}">{{ p }}</a>
+                </li>
+            {% else %}
+                <li>
+                    <a href="{{ '/latest/%d' | format(p) | path }}">{{ p }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+        {% if lastpage < pages %}
+            <li><span aria-hidden="true">...</span></li>
+        {% endif %}
+        {% if page < pages %}<li>
+            <a href="{{ '/latest/%d' | format(page + 1) | path }}"
+               aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>{% endif %}
+    </ul>
+</nav>
+{% endif %}
+
+{% endblock %}

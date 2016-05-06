@@ -1,5 +1,7 @@
 package com.petfinder;
 
+import com.petfinder.service.AdvertisementService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,15 +20,23 @@ import com.lyncode.jtwig.mvc.JtwigViewResolver;
 @EnableTransactionManagement
 public class PetFinderApplication {
 
-	@Bean
+    @Autowired
+    AdvertisementService advertisementService = new AdvertisementService();
+
+    public static void main(String[] args) {
+		SpringApplication.run(PetFinderApplication.class, args);
+	}
+
+    @Bean
     public ViewResolver viewResolver() {
         JtwigViewResolver viewResolver = new JtwigViewResolver();
         viewResolver.setPrefix("/WEB-INF/classes/views/");
         viewResolver.setSuffix(".twig");
         return viewResolver;
     }
-	
-	public static void main(String[] args) {
-		SpringApplication.run(PetFinderApplication.class, args);
-	}
+
+    @Bean
+    public AdvertisementService advertisementService() {
+        return this.advertisementService;
+    }
 }
