@@ -1,13 +1,12 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>User registration</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" href="css/bootstrap.min.css"/>
-</head>
-<body>
+{% extends 'template.twig' %}
+{% block title %}User registered successfully{% endblock %}
+{% block content %}
 
-<p>Użytkownik '{{ login }}' został zarejestrowany.</p>
+<div class="row">
+    <div class="alert alert-success col-md-6 col-md-offset-3 text-center"
+         role="alert">
+        User '{{ login }}' has been registered successfully.
+    </div>
+</div>
 
-</body>
-</html>
+{% endblock %}
