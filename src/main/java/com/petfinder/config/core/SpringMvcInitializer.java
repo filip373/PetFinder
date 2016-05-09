@@ -18,7 +18,7 @@ public class SpringMvcInitializer
 
 	@Override
 	protected String[] getServletMappings() {
-		return new String[] { ".htm" };
+		return new String[] { "/" };
 	}
 	
 }
