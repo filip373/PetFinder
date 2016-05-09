@@ -2,6 +2,24 @@
 {% block title %}Add advertisement{% endblock %}
 {% block content %}
 
+{% if statusEmpty %}
+<div class="row">
+    <div class="alert alert-danger col-md-6 col-md-offset-3 text-center"
+         role="alert">
+        {{ statusEmpty }}
+    </div>
+</div>
+{% endif %}
+
+{% if statusOK %}
+<div class="row">
+    <div class="alert alert-success col-md-6 col-md-offset-3 text-center"
+         role="alert">
+        {{ statusOK }}
+    </div>
+</div>
+{% endif %}
+
 <div class="row">
     <div class="panel panel-default ">
         <div class="panel-body">
@@ -22,7 +40,7 @@
                            class="form-control" placeholder="Content"></textarea>
                 </div>
 
-                <h5>Pet information</h5>
+                <h4>Pet information</h4>
 
                 <div class="form-group">
                     <label class="sr-only" for="petName">Pet name</label>
@@ -48,7 +66,7 @@
                            class="form-control" placeholder="Category name">
                 </div>
 
-                <h5>Location</h5>
+                <h4>Location</h4>
 
                 <div class="form-group">
                     <label class="sr-only" for="voivodership">Voivodership</label>
@@ -66,6 +84,26 @@
                     <label class="sr-only" for="place">Place</label>
                     <input type="text" id="place" name="place" value="{{ place }}"
                            class="form-control" placeholder="Place">
+                </div>
+
+                 <h4>More</h4>
+
+                <div class="form-group">
+                    <label class="sr-only" for="tagsString">Tags</label>
+                    <input type="text" id="tagsString" name="tagsString" value="{{ tagsString }}"
+                           class="form-control" placeholder="Tags">
+                </div>
+
+                <div class="form-group">
+                    <h5>Attachment type</h5>
+                    <input type="radio" name="attachmentType" value="image" checked>Image<br>
+                    <input type="radio" name="attachmentType" value="video">Video<br>
+                </div>
+
+                <div class="form-group">
+                    <label class="sr-only" for="attachmentUri">Attachment uri</label>
+                    <input type="text" id="attachmentUri" name="attachmentUri" value="{{ attachmentUri }}"
+                           class="form-control" placeholder="Attachment uri">
                 </div>
 
                 <button type="submit" class="btn btn-success center-block">
