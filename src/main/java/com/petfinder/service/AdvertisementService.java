@@ -46,4 +46,6 @@ public class AdvertisementService {
         long pages = advertisementRepository.count();
         return (long) Math.ceil(pages / perPage);
     }
+	
+	//new
 }
