@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class AdvertisementController {
@@ -75,5 +76,20 @@ public class AdvertisementController {
                 advertisementService.getLatestAdvertisements(page - 1)
         );
         return "adlist";
+    }
+    
+    @RequestMapping(value = "/newAdd")
+    public String newAdvertisement( @RequestParam(required = false) String title,
+                          @RequestParam(required = false) String content,
+                          @RequestParam(required = false) String petName,
+                          @RequestParam(required = false) Integer age,
+                          @RequestParam(required = false) String race,
+                          @RequestParam(required = false) String categoryName,
+                          @RequestParam(required = false) String voivodership,
+                          @RequestParam(required = false) String commune,
+                          @RequestParam(required = false) String place,
+                          Model model) {
+        advertisementService.newAdvertisement(title, content, petName, age, race,categoryName, voivodership, commune, place);
+        return "addAdvertisement";
     }
 }
