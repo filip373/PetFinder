@@ -129,6 +129,11 @@ public class User extends AbstractPersistable<Long> implements Serializable {
     public void setPets(List<Pet> pets) {
         this.pets = pets;
     }
+    
+    public String getRole()
+    {
+    	return "ROLE_USER";
+    }
 
     @Override
     public String toString() {

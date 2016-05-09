@@ -14,21 +14,15 @@
 <div class="row">
     <div class="panel panel-default col-md-4 col-md-offset-4">
         <div class="panel-body">
-            <h3>Register user</h3>
+            <h3>Login</h3>
 
-            <form action="/register" method="post"
+            <form action="{{ '/login' | path }}" method="post"
                   enctype="multipart/form-data">
 
                 <div class="form-group">
                     <label class="sr-only" for="login">Username</label>
-                    <input type="text" id="login" name="login" value="{{ login }}"
+                    <input type="text" id="username" name="username" value="{{ login }}"
                            class="form-control" placeholder="Username">
-                </div>
-
-                <div class="form-group">
-                    <label class="sr-only" for="email">Email</label>
-                    <input type="email" id="email" name="email" value="{{ email }}"
-                           class="form-control" placeholder="Email address">
                 </div>
 
                 <div class="form-group">
@@ -36,17 +30,10 @@
                     <input type="password" id="password" name="password"
                            class="form-control" placeholder="Password">
                 </div>
-
-                <div class="form-group">
-                    <label class="sr-only" for="repeatPassword">
-                        Re-enter password
-                    </label>
-                    <input type="password" id="repeatPassword" name="repeatPassword"
-                           class="form-control" placeholder="Re-enter password">
-                </div>
+                <input type="hidden" name="{{ csrf.parameterName }}" value="{{ csrf.token }}" />
 
                 <button type="submit" class="btn btn-success center-block">
-                    Register
+                    Login
                 </button>
             </form>
         </div>
