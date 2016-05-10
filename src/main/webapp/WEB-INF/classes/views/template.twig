@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}{% endblock %} - PetFinder</title>
+    <meta charset="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css">
+</head>
+<body>
+	<nav class="navbar navbar-inverse">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <a class="navbar-brand" href="/">PetFinder</a>
+	    </div>
+	    <ul class="nav navbar-nav">
+	      <li class="active"><a href="/">Home</a></li>
+	      <li><a href="{{'/login' | path }}">Login</a></li>
+	      <li><a href="{{'/register' | path }}">Register</a></li>
+	      <li><a href="{{'/logout' | path }}">Logout</a></li>
+	    </ul>
+	  </div>
+	</nav>
+    <div class="container">
+{% block content %}{% endblock %}
+    </div>
+	<footer class="footer" style="background-color: black; position:fixed; bottom: 0;left: 0;right: 0;">
+      <div class="container">
+         <p class="text-muted pull-right">© 2015 PetFinder. All rights reserved</p>
+      </div>
+    </footer>
+</body>
+</html>

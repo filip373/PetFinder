@@ -1,0 +1,117 @@
+{% extends 'template.twig' %}
+{% block title %}Add advertisement{% endblock %}
+{% block content %}
+
+{% if statusEmpty %}
+<div class="row">
+    <div class="alert alert-danger col-md-6 col-md-offset-3 text-center"
+         role="alert">
+        {{ statusEmpty }}
+    </div>
+</div>
+{% endif %}
+
+{% if statusOK %}
+<div class="row">
+    <div class="alert alert-success col-md-6 col-md-offset-3 text-center"
+         role="alert">
+        {{ statusOK }}
+    </div>
+</div>
+{% endif %}
+
+<div class="row">
+    <div class="panel panel-default ">
+        <div class="panel-body">
+            <h3>Add advertisement</h3>
+
+            <form action="{{ '/newAdd' | path }}" method="post"
+                  enctype="multipart/form-data">
+
+                <div class="form-group">
+                    <label class="sr-only" for="title">Title</label>
+                    <input type="text" id="title" name="title" value="{{ title }}"
+                           class="form-control" placeholder="Title">
+                </div>
+
+                <div class="form-group">
+                    <label class="sr-only" for="content">Content</label>
+                    <textarea rows="4" cols="50" id="content" name="content" value="{{ content }}"
+                           class="form-control" placeholder="Content"></textarea>
+                </div>
+
+                <h4>Pet information</h4>
+
+                <div class="form-group">
+                    <label class="sr-only" for="petName">Pet name</label>
+                    <input type="text" id="petName" name="petName" value="{{ petName }}"
+                           class="form-control" placeholder="Pet name">
+                </div>
+
+                <div class="form-group">
+                    <label class="sr-only" for="age">Age</label>
+                    <input type="number" id="age" name="age" value="{{ age }}"
+                           class="form-control" placeholder="Age">
+                </div>
+
+                <div class="form-group">
+                    <label class="sr-only" for="race">Race</label>
+                    <input type="text" id="race" name="race" value="{{ race }}"
+                           class="form-control" placeholder="Race">
+                </div>
+
+                <div class="form-group">
+                    <label class="sr-only" for="categoryName">Category name</label>
+                    <input type="text" id="categoryName" name="categoryName" value="{{ categoryName }}"
+                           class="form-control" placeholder="Category name">
+                </div>
+
+                <h4>Location</h4>
+
+                <div class="form-group">
+                    <label class="sr-only" for="voivodership">Voivodership</label>
+                    <input type="text" id="voivodership" name="voivodership" value="{{ voivodership }}"
+                           class="form-control" placeholder="Voivodership">
+                </div>
+
+                <div class="form-group">
+                    <label class="sr-only" for="commune">Commune</label>
+                    <input type="text" id="commune" name="commune" value="{{ commune }}"
+                           class="form-control" placeholder="Commune">
+                </div>
+
+                <div class="form-group">
+                    <label class="sr-only" for="place">Place</label>
+                    <input type="text" id="place" name="place" value="{{ place }}"
+                           class="form-control" placeholder="Place">
+                </div>
+
+                 <h4>More</h4>
+
+                <div class="form-group">
+                    <label class="sr-only" for="tagsString">Tags</label>
+                    <input type="text" id="tagsString" name="tagsString" value="{{ tagsString }}"
+                           class="form-control" placeholder="Tags">
+                </div>
+
+                <div class="form-group">
+                    <h5>Attachment type</h5>
+                    <input type="radio" name="attachmentType" value="image" checked>Image<br>
+                    <input type="radio" name="attachmentType" value="video">Video<br>
+                </div>
+
+                <div class="form-group">
+                    <label class="sr-only" for="attachmentUri">Attachment uri</label>
+                    <input type="text" id="attachmentUri" name="attachmentUri" value="{{ attachmentUri }}"
+                           class="form-control" placeholder="Attachment uri">
+                </div>
+
+                <button type="submit" class="btn btn-success center-block">
+                    Add 
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
