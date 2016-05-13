@@ -4,6 +4,8 @@ import com.petfinder.exception.PasswordsDoesNotMatchException;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,8 +42,8 @@ public class UserService {
 	}
 
 	private String hashPassword(String password) {
-		String salt = BCrypt.gensalt(31);
-        return BCrypt.hashpw(password, salt);
+		PasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder.encode(password);
 	}
 
 	private boolean verifyLogin(String login) throws LoginExistsException {
