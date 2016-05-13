@@ -1,50 +1,47 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>{% block title %}{% endblock %} - PetFinder</title>
-    <meta charset="text/html; charset=UTF-8">
-    <link rel="stylesheet" href="materialize/dist/css/materialize.min.css">
-    <link rel="stylesheet" href="css/custom.css">
-</head>
-<body>
-	<nav class="navbar navbar-inverse">
-	   <div class="navbar-fixed">
-            <nav class="blue darken-3">
-                <div class="container">
-                    <div class="nav-wrapper">
-                        <ul>
-					      <li><a href="/">Home</a></li>
-					      <li><a href="/newAdd">Add Poster</a></li>
-					      <li><a href="{{'/login' | path }}">Login</a></li>
-					      <li><a href="{{'/register' | path }}">Register</a></li>
-					      <li><a href="{{'/logout' | path }}">Logout</a></li>
-	    				</ul>
-                    </div>
-                </div>
-            </nav>
-        </div>
-	  <div class="container-fluid">
-	    <div class="navbar-header">
-	      <a class="navbar-brand" href="/">PetFinder</a>
+	<head>
+	    <title>{% block title %}{% endblock %} - PetFinder</title>
+	    <meta charset="text/html; charset=UTF-8">
+	    <link rel="stylesheet" href="materialize/dist/css/materialize.min.css">
+	    <link rel="stylesheet" href="css/custom.css">
+	</head>
+	<body>
+		<nav class="navbar navbar-inverse">
+		   <div class="navbar-fixed">
+	            <nav class="blue darken-3">
+	                <div class="container">
+	                    <div class="nav-wrapper">
+	                        <ul>
+						      <li><a href="/">Home</a></li>
+						      <li><a href="/newAdd">Add Poster</a></li>
+						      <li><a href="{{'/login' | path }}">Login</a></li>
+						      <li><a href="{{'/register' | path }}">Register</a></li>
+						      {% if(isAuthenticated) %}
+						          <li><a href="{{'/logout' | path }}">Logout</a></li>
+						      {% endif %}
+		    				</ul>
+	                    </div>
+	                </div>
+	            </nav>
+	        </div>
+		</nav>
+	    <div class="container">
+			{% block content %}{% endblock %}
 	    </div>
-
-	  </div>
-	</nav>
-    <div class="container">
-{% block content %}{% endblock %}
-    </div>
-    <main>
-	</main>
-    <footer class="page-footer blue darken-3">
-        <div class="footer-copyright">
-            <div class="container">
-                © 2015 theSkillBook, All Rights Reserved
-            </div>
-        </div>
-    </footer>
-    {% block javascripts %}
-            <script type="text/javascript" src="materialize/dist/js/materialize.min.js"></script>
-            {% block additonalJavaScripts %}{% endblock %}
-    {% endblock %}
-</body>
+	    <main>
+		</main>
+	    <footer class="page-footer blue darken-3">
+	        <div class="footer-copyright">
+	            <div class="container">
+	                © 2016 PetFinder, All Rights Reserved
+	            </div>
+	        </div>
+	    </footer>
+	    {% block javascripts %}
+			<script type="text/javascript" src="jquery/dist/jquery.min.js"></script>
+	        <script type="text/javascript" src="materialize/dist/js/materialize.min.js"></script>
+	        {% block additonalJavaScripts %}{% endblock %}
+	    {% endblock %}
+	</body>
 </html>
