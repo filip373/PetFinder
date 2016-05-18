@@ -1,9 +1,9 @@
 package com.petfinder.service;
 
-import com.petfinder.exception.PasswordsDoesNotMatchException;
 import org.apache.commons.validator.routines.EmailValidator;
-import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,6 +14,7 @@ import com.petfinder.domain.User;
 import com.petfinder.exception.EmailExistsException;
 import com.petfinder.exception.InvalidEmailException;
 import com.petfinder.exception.LoginExistsException;
+import com.petfinder.exception.PasswordsDoesNotMatchException;
 
 @Service
 public class UserService {
@@ -39,6 +40,15 @@ public class UserService {
                 }
 			}
 		}
+	}
+	
+	public boolean checkIfUserIsLogged()
+	{	
+		if(SecurityContextHolder.getContext().getAuthentication() 
+		          instanceof AnonymousAuthenticationToken) {
+			return false;
+		}
+		return true;
 	}
 
 	private String hashPassword(String password) {
