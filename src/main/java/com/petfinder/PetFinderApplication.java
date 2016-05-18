@@ -1,6 +1,5 @@
 package com.petfinder;
 
-import com.petfinder.service.AdvertisementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -12,6 +11,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.ViewResolver;
 
 import com.lyncode.jtwig.mvc.JtwigViewResolver;
+import com.petfinder.service.AdvertisementService;
+import com.petfinder.service.UserService;
 
 @SpringBootApplication
 @PropertySource(value = { "classpath:application.properties" })
@@ -22,8 +23,11 @@ public class PetFinderApplication {
 
     @Autowired
     AdvertisementService advertisementService = new AdvertisementService();
+    
+    @Autowired
+    UserService userService = new UserService();    
 
-    public static void main(String[] args) {
+	public static void main(String[] args) {
 		SpringApplication.run(PetFinderApplication.class, args);
 	}
 
@@ -38,5 +42,10 @@ public class PetFinderApplication {
     @Bean
     public AdvertisementService advertisementService() {
         return this.advertisementService;
+    }
+    
+    @Bean
+    public UserService userService() {
+        return this.userService;
     }
 }
