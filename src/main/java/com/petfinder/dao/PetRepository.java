@@ -1,5 +1,6 @@
 package com.petfinder.dao;
 
+import com.petfinder.domain.Location;
 import com.petfinder.domain.Pet;
 import com.petfinder.domain.PetCategory;
 import com.petfinder.domain.User;
@@ -8,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 
 import javax.transaction.Transactional;
+
+import java.util.Collection;
 import java.util.List;
 
 public interface PetRepository extends CrudRepository<Pet, Long> {
@@ -23,6 +26,13 @@ public interface PetRepository extends CrudRepository<Pet, Long> {
 
     @Transactional
     Page<Pet> findByNameContaining(String name, Pageable pageable);
+    
+    @Transactional
+    List<Pet> findByNameContainingOrRaceContainingOrCategoryIn(
+    	String name, 
+    	String race,
+    	Collection<PetCategory> categories
+    );
 
     @Transactional
     List<Pet> findByRace(String race);

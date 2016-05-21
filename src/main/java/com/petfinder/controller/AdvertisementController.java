@@ -7,12 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class AdvertisementController {
@@ -117,5 +120,39 @@ public class AdvertisementController {
                }
          }
         return "addAdvertisement";
+    }
+	
+	@ResponseBody
+	@RequestMapping(value = "/searchResult")
+	public ModelAndView getSearchResults( Model model,
+        @RequestParam(required = false) String adInfo,
+        @RequestParam(required = false) String petInfo,
+        @RequestParam(required = false) String locationInfo,
+        @RequestParam(required = false) String tagInfo
+	) {
+        long pages = advertisementService.getNumberOfPages(20);
+        if (pages < 1) {
+            pages = 1;
+        }
+
+        long firstpage = 1;
+        long lastpage = 3;
+        if (lastpage > pages) {
+            lastpage = pages;
+        }
+
+        List<Long> printPages = new ArrayList<>();
+        for (long p = firstpage; p <= lastpage; p++) {
+            printPages.add(p);
+        }
+        model.addAttribute("page", 10);
+        model.addAttribute("pages", pages);
+        model.addAttribute("firstpage", firstpage);
+        model.addAttribute("lastpage", lastpage);
+        model.addAttribute("printPages", printPages);
+        model.addAttribute("advertisements",
+                advertisementService.getSearchedAdvertisements(0, 15, adInfo, petInfo, locationInfo, tagInfo)
+        );
+        return new ModelAndView( "searchResults" );
     }
 }

@@ -18,6 +18,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -59,7 +61,7 @@ public class AdvertisementService {
 
     @Transactional
     public List<Advertisement> getLatestAdvertisements(int page) {
-        return getLatestAdvertisements(page, 20);
+        return getLatestAdvertisements(page, 2);
     }
 
     @Transactional
@@ -100,5 +102,46 @@ public class AdvertisementService {
         }
         advertisement.setAttachments(attachments);
         advertisementRepository.save(advertisement);
+    }
+    
+    @Transactional
+    public List<Advertisement> getSearchedAdvertisements(
+    	int page, 
+    	int perPage,
+    	String adInfo,
+    	String petInfo,
+    	String locationInfo,
+    	String tagInfo
+    ) {
+
+    	List<PetCategory> categories = petCategoryRepository.findByNameContaining(petInfo);
+    	List<Pet> pets = petRepository.findByNameContainingOrRaceContainingOrCategoryIn(
+			petInfo, 
+			petInfo, 
+			categories
+    	);
+		List<Location> locations = locationRepository.findByVoivodershipContainingOrPlaceContainingOrCommuneContaining(
+	    		locationInfo, 
+	    		locationInfo, 
+	    		locationInfo
+	    	);
+    	List<Tag> tags = tagRepository.findByNameContaining(tagInfo);
+        List<Advertisement> advertisements = advertisementRepository
+		.findByPetInAndTitleContainingAndLocationInAndTagsIn(
+			pets, 
+			adInfo, 
+			locations,
+			tags,
+		    new PageRequest(page, perPage)
+        ).getContent();
+
+        for (Advertisement advertisement : advertisements) {
+            advertisement.getAttachments().size();
+            advertisement.getLocation();
+            advertisement.getPet();
+            advertisement.getTags().size();
+            advertisement.getUser();
+        }
+        return advertisements;
     }
 }

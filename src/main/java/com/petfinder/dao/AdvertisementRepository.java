@@ -32,7 +32,16 @@ public interface AdvertisementRepository
 
     @Transactional
     Page<Advertisement> findByPet(Pet pet, Pageable pageable);
-
+    
+    @Transactional
+    Page<Advertisement> findByPetInAndTitleContainingAndLocationInAndTagsIn(
+    	Collection<Pet> pets, 
+    	String title,
+    	Collection<Location> locations,
+    	Collection<Tag> tags,
+    	Pageable pageable
+    );
+    
     @Transactional
     List<Advertisement> findByLocation(Location location);
 
@@ -44,4 +53,5 @@ public interface AdvertisementRepository
 
     @Transactional
     Page<Advertisement> findByTitleContaining(String title, Pageable pageable);
+    
 }
