@@ -1,0 +1,14 @@
+{
+  "name": "Materialize",
+  "dependencies": {
+    "materialize": "~0.97.0"
+  },
+  "license": "proprietary",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
