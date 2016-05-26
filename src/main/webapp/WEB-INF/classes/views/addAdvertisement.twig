@@ -23,7 +23,6 @@
 	{% endif %}
     <form action="{{ '/newAdd' | path }}" method="post"
           enctype="multipart/form-data">
-
     	<label for="title">Title</label>
         <input type="text" id="title" name="title" value="{{ title }}"
                class="form-control" placeholder="Title">                  
@@ -31,46 +30,52 @@
         <label for="content">Content</label>
         <textarea rows="4" cols="50" id="content" name="content" value="{{ content }}"
                class="materialize-textarea" placeholder="Content"></textarea>
-
         <h4 class="grey-text text-lighten-2">Pet information</h4>
-
-        <label for="petName">Pet name</label>
-        <input type="text" id="petName" name="petName" value="{{ petName }}"
-               class="form-control" placeholder="Pet name">
-
-        <label for="age">Age</label>
-        <input type="number" id="age" name="age" value="{{ age }}"
-               class="form-control">
-
-        <label for="race">Race</label>
-        <input type="text" id="race" name="race" value="{{ race }}"
-               class="form-control" placeholder="Race">
-
-        <label for="categoryName">Category name</label>
-        <input type="text" id="categoryName" name="categoryName" value="{{ categoryName }}"
-               class="form-control" placeholder="Category name">
-
+		<div class="input-field col s6">
+	        <label for="petName">Pet name</label>
+	        <input type="text" id="petName" name="petName" value="{{ petName }}"
+	               class="form-control" placeholder="Pet name">
+		</div>
+		<div class="input-field col s6">
+	        <label for="age">Age</label>
+	        <input type="number" id="age" name="age" value="{{ age }}"
+	               class="form-control">
+		</div>
+		<div class="input-field col s6">
+	        <label for="race">Race</label>
+	        <input type="text" id="race" name="race" value="{{ race }}"
+	               class="form-control" placeholder="Race">
+		</div>
+		<div class="input-field col s6">
+	        <label for="categoryName">Category name</label>
+	        <input type="text" id="categoryName" name="categoryName" value="{{ categoryName }}"
+	               class="form-control" placeholder="Category name">
+		</div>
         <h4 class="grey-text text-lighten-2">Location</h4>
-
-        <label for="voivodership">Voivodership</label>
-        <input type="text" id="voivodership" name="voivodership" value="{{ voivodership }}"
-               class="form-control" placeholder="Voivodership">
-
-        <label for="commune">Commune</label>
-        <input type="text" id="commune" name="commune" value="{{ commune }}"
-               class="form-control" placeholder="Commune">
-
-        <label for="place">Place</label>
-        <input type="text" id="place" name="place" value="{{ place }}"
-               class="form-control" placeholder="Place">
-
-         <h4 class="grey-text text-lighten-2">More</h4>
-
+		<div class="input-field col s6">
+	        <label for="voivodership">Voivodership</label>
+	        <input type="text" id="voivodership" name="voivodership" value="{{ voivodership }}"
+	               class="form-control" placeholder="Voivodership">
+	    </div>
+		<div class="input-field col s6">
+	        <label for="commune">Commune</label>
+	        <input type="text" id="commune" name="commune" value="{{ commune }}"
+	               class="form-control" placeholder="Commune">
+		</div>
+		<div class="input-field col s6">
+	        <label for="place">Place</label>
+	        <input type="text" id="place" name="place" value="{{ place }}"
+	               class="form-control" placeholder="Place">
+		</div>
+		<div class="col s12">
+        	<h4 class="grey-text text-lighten-2">More</h4>
+        </div>
+        <div class="input-field col s12">
         <label for="tagsString">Tags</label>
         <input type="text" id="tagsString" name="tagsString" value="{{ tagsString }}"
                class="form-control" placeholder="Tags">
-
-        <div class="file-field input-field">
+        </div>
+        <div class="file-field input-field col s12">
 	    	<div class="btn">
 	        	<span>Image</span>
 	        	<input type="file">
@@ -79,7 +84,7 @@
 	        	<input class="file-path validate" type="text">
 	      	</div>
 	    </div>
-	    <div class="file-field input-field">
+	    <div class="file-field input-field col s12">
 	    	<div class="btn">
 	        	<span>Video</span>
 	        	<input type="file">
@@ -89,9 +94,11 @@
 	      	</div>
 	    </div>
 		<input type="hidden" name="{{ csrf.parameterName }}" value="{{ csrf.token }}" />
-        <button type="submit" class="btn btn-success center-block">
-            Add 
-        </button>
+		<div class="col s12">
+	        <button type="submit" class="btn btn-success center-block">
+	            Add 
+	        </button>
+        </div>
     </form>
 </div>
 

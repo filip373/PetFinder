@@ -61,7 +61,7 @@ public class AdvertisementService {
 
     @Transactional
     public List<Advertisement> getLatestAdvertisements(int page) {
-        return getLatestAdvertisements(page, 2);
+        return getLatestAdvertisements(page, 20);
     }
 
     @Transactional

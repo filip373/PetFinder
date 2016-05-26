@@ -17,37 +17,56 @@
     </div>
 {% endfor %}
 {% if pages > 1 %}
-	<nav class="center-block">
-	    <ul class="pagination">
-	        {% if page > 1 %}<li>
-	            <a href="{{ '/latest/%d' | format(page - 1) | path }}"
-	               aria-label="Previous">
-	                <span aria-hidden="true">&laquo;</span>
-	            </a>
-	        </li>{% endif %}
-	        {% if firstpage > 1 %}
-	            <li><span aria-hidden="true">...</span></li>
-	        {% endif %}
-	        {% for p in printPages %}
-	            {% if p == page %}
-	                <li class="active">
-	                    <a href="{{ '/latest/%d' | format(p) | path }}">{{ p }}</a>
-	                </li>
-	            {% else %}
-	                <li>
-	                    <a href="{{ '/latest/%d' | format(p) | path }}">{{ p }}</a>
-	                </li>
-	            {% endif %}
-	        {% endfor %}
-	        {% if lastpage < pages %}
-	            <li><span aria-hidden="true">...</span></li>
-	        {% endif %}
-	        {% if page < pages %}<li>
-	            <a href="{{ '/latest/%d' | format(page + 1) | path }}"
-	               aria-label="Next">
-	                <span aria-hidden="true">&raquo;</span>
-	            </a>
-	        </li>{% endif %}
-	    </ul>
-	</nav>
+    <ul class="pagination">
+        {% if page > 1 %}<li class="waves-effect">
+    		<form action="{{ '/searchResult' | path }}" method="post" id="searchForm"
+	          enctype="multipart/form-data">
+			        <input type="hidden" id="adInfo" name="adInfo" value="{{ adInfo }}">
+			        <input type="hidden" id="petInfo" name="petInfo" value="{{ petInfo }}">
+			        <input type="hidden" id="locationInfo" name="locationInfo" value="{{ locationInfo }}">
+			        <input type="hidden" id="tagInfo" name="tagInfo" value="{{ tagInfo }}">  
+		        <input type="hidden" name="{{ csrf.parameterName }}" value="{{ csrf.token }}" />
+		        <input type="hidden" name="page" value="{{ format(page - 1) }}" />
+		            <button type="submit" class="btn-floating">
+		                &laquo;
+		            </button>
+		    </form>
+        </li>{% endif %}
+        {% if firstpage > 1 %}
+            <li><span aria-hidden="true">...</span></li>
+        {% endif %}
+        {% for p in printPages %}          
+            <li {% if p == page %} class="active" {% endif %} class="waves-effect">
+        		<form action="{{ '/searchResult' | path }}" method="post" id="searchForm"
+		          enctype="multipart/form-data">
+				        <input type="hidden" id="adInfo" name="adInfo" value="{{ adInfo }}">
+				        <input type="hidden" id="petInfo" name="petInfo" value="{{ petInfo }}">
+				        <input type="hidden" id="locationInfo" name="locationInfo" value="{{ locationInfo }}">
+				        <input type="hidden" id="tagInfo" name="tagInfo" value="{{ tagInfo }}">  
+			        <input type="hidden" name="{{ csrf.parameterName }}" value="{{ csrf.token }}" />
+			        <input type="hidden" name="page" value="{{ p }}" />
+			            <button type="submit" class="btn-floating">
+			                {{ p }}
+			            </button>
+			    </form>
+            </li>
+        {% endfor %}
+        {% if lastpage < pages %}
+            <li><span aria-hidden="true">...</span></li>
+        {% endif %}
+        {% if page < pages %}<li class="waves-effect">
+    		<form action="{{ '/searchResult' | path }}" method="post" id="searchForm"
+	          enctype="multipart/form-data">
+			        <input type="hidden" id="adInfo" name="adInfo" value="{{ adInfo }}">
+			        <input type="hidden" id="petInfo" name="petInfo" value="{{ petInfo }}">
+			        <input type="hidden" id="locationInfo" name="locationInfo" value="{{ locationInfo }}">
+			        <input type="hidden" id="tagInfo" name="tagInfo" value="{{ tagInfo }}">  
+		        <input type="hidden" name="{{ csrf.parameterName }}" value="{{ csrf.token }}" />
+		        <input type="hidden" name="page" value="{{ format(page + 1) }}" />
+		            <button type="submit" class="btn-floating">
+		                &raquo;
+		            </button>
+		    </form>
+        </li>{% endif %}
+    </ul>
 {% endif %}

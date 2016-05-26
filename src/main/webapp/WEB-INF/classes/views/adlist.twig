@@ -26,6 +26,7 @@
 		               class="form-control" placeholder="Tags">
 	        </div>	        
 	        <input type="hidden" name="{{ csrf.parameterName }}" value="{{ csrf.token }}" />
+	        <input type="hidden" name="page" value="1" />
 	        <div class="form-actions clearfix">
 	            <button class="btn btn-success btn-lg" type="submit">
 	                {% block buttonFormLabel %} Search {% endblock %}
@@ -54,9 +55,9 @@
 		{% endfor %}
 		{% if pages > 1 %}
 		    <ul class="pagination">
-		        {% if page > 1 %}<li>
+		        {% if page > 1 %}<li class="waves-effect">
 		            <a href="{{ '/latest/%d' | format(page - 1) | path }}"
-		               aria-label="Previous">
+		               aria-label="Previous" class="btn-floating">
 		                <span aria-hidden="true">&laquo;</span>
 		            </a>
 		        </li>{% endif %}
@@ -65,20 +66,20 @@
 		        {% endif %}
 		        {% for p in printPages %}
 		            {% if p == page %}
-		                <li class="active">
-		                    <a href="{{ '/latest/%d' | format(p) | path }}">{{ p }}</a>
+		                <li class="active" class="waves-effect">
+		                    <a href="{{ '/latest/%d' | format(p) | path }}" class="btn-floating">{{ p }}</a>
 		                </li>
 		            {% else %}
 		                <li>
-		                    <a href="{{ '/latest/%d' | format(p) | path }}">{{ p }}</a>
+		                    <a href="{{ '/latest/%d' | format(p) | path }}" class="btn-floating">{{ p }}</a>
 		                </li>
 		            {% endif %}
 		        {% endfor %}
 		        {% if lastpage < pages %}
 		            <li><span aria-hidden="true">...</span></li>
 		        {% endif %}
-		        {% if page < pages %}<li>
-		            <a href="{{ '/latest/%d' | format(page + 1) | path }}"
+		        {% if page < pages %}<li class="waves-effect">
+		            <a href="{{ '/latest/%d' | format(page + 1) | path }}" class="btn-floating"
 		               aria-label="Next">
 		                <span aria-hidden="true">&raquo;</span>
 		            </a>
