@@ -3,3 +3,4 @@ target/
 *.iml
 .settings/
 src/main/resources/static/materialize
+src/main/resources/static/jquery
