@@ -1,17 +1,17 @@
 package com.petfinder.dao;
 
-import com.petfinder.domain.Location;
-import com.petfinder.domain.Pet;
-import com.petfinder.domain.PetCategory;
-import com.petfinder.domain.User;
+import java.util.Collection;
+import java.util.List;
+
+import javax.transaction.Transactional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 
-import javax.transaction.Transactional;
-
-import java.util.Collection;
-import java.util.List;
+import com.petfinder.domain.Pet;
+import com.petfinder.domain.PetCategory;
+import com.petfinder.domain.User;
 
 public interface PetRepository extends CrudRepository<Pet, Long> {
 
