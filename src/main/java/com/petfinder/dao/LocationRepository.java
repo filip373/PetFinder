@@ -25,4 +25,10 @@ public interface LocationRepository extends CrudRepository<Location, Long> {
     List<Location> findByVoivodershipAndPlaceAndCommune(String voivodership,
                                                         String place,
                                                         String commune);
+    @Transactional
+    List<Location> findByVoivodershipContainingOrPlaceContainingOrCommuneContaining(
+		String voivodership,
+        String place,
+        String commune
+    );
 }
