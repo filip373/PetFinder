@@ -1,0 +1,72 @@
+{% for ad in advertisements %}
+    <div class="row">
+    <h4 class="grey-text text-lighten-2">{{ ad.getTitle }}</h4>
+        <strong>Date</strong>:
+        {{ ad.getCreatedDate | date('yyyy-MM-dd HH:mm') }} 
+
+        {% if ad.getUser %}
+            <strong>Author</strong>: {{ ad.getUser }} 
+        {% endif %}
+
+        {% if ad.getTags %}
+            <strong>Tags</strong>:
+            {% for tag in ad.getTags %}
+                <span class="label label-primary">#{{ tag.getName }}</span>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endfor %}
+{% if pages > 1 %}
+    <ul class="pagination">
+        {% if page > 1 %}<li class="waves-effect">
+    		<form action="{{ '/searchResult' | path }}" method="post" id="searchForm"
+	          enctype="multipart/form-data">
+			        <input type="hidden" id="adInfo" name="adInfo" value="{{ adInfo }}">
+			        <input type="hidden" id="petInfo" name="petInfo" value="{{ petInfo }}">
+			        <input type="hidden" id="locationInfo" name="locationInfo" value="{{ locationInfo }}">
+			        <input type="hidden" id="tagInfo" name="tagInfo" value="{{ tagInfo }}">  
+		        <input type="hidden" name="{{ csrf.parameterName }}" value="{{ csrf.token }}" />
+		        <input type="hidden" name="page" value="{{ format(page - 1) }}" />
+		            <button type="submit" class="btn-floating">
+		                &laquo;
+		            </button>
+		    </form>
+        </li>{% endif %}
+        {% if firstpage > 1 %}
+            <li><span aria-hidden="true">...</span></li>
+        {% endif %}
+        {% for p in printPages %}          
+            <li {% if p == page %} class="active" {% endif %} class="waves-effect">
+        		<form action="{{ '/searchResult' | path }}" method="post" id="searchForm"
+		          enctype="multipart/form-data">
+				        <input type="hidden" id="adInfo" name="adInfo" value="{{ adInfo }}">
+				        <input type="hidden" id="petInfo" name="petInfo" value="{{ petInfo }}">
+				        <input type="hidden" id="locationInfo" name="locationInfo" value="{{ locationInfo }}">
+				        <input type="hidden" id="tagInfo" name="tagInfo" value="{{ tagInfo }}">  
+			        <input type="hidden" name="{{ csrf.parameterName }}" value="{{ csrf.token }}" />
+			        <input type="hidden" name="page" value="{{ p }}" />
+			            <button type="submit" class="btn-floating">
+			                {{ p }}
+			            </button>
+			    </form>
+            </li>
+        {% endfor %}
+        {% if lastpage < pages %}
+            <li><span aria-hidden="true">...</span></li>
+        {% endif %}
+        {% if page < pages %}<li class="waves-effect">
+    		<form action="{{ '/searchResult' | path }}" method="post" id="searchForm"
+	          enctype="multipart/form-data">
+			        <input type="hidden" id="adInfo" name="adInfo" value="{{ adInfo }}">
+			        <input type="hidden" id="petInfo" name="petInfo" value="{{ petInfo }}">
+			        <input type="hidden" id="locationInfo" name="locationInfo" value="{{ locationInfo }}">
+			        <input type="hidden" id="tagInfo" name="tagInfo" value="{{ tagInfo }}">  
+		        <input type="hidden" name="{{ csrf.parameterName }}" value="{{ csrf.token }}" />
+		        <input type="hidden" name="page" value="{{ format(page + 1) }}" />
+		            <button type="submit" class="btn-floating">
+		                &raquo;
+		            </button>
+		    </form>
+        </li>{% endif %}
+    </ul>
+{% endif %}
