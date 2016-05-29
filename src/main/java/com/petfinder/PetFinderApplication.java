@@ -65,7 +65,9 @@ public class PetFinderApplication implements CommandLineRunner {
             String title = String.format("%s%s", atitles[rand.nextInt(atitles.length)],
                     pet);
             advertisementService.newAdvertisement(
-                    title, "Test", anames[rand.nextInt(anames.length)],
+                    title,
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas feugiat in tortor sed egestas. Nulla id interdum enim, quis commodo est. Donec tempor, quam vitae sodales scelerisque, quam velit feugiat elit, nec ultrices lectus velit non quam. Sed eleifend, eros nec scelerisque ultricies, lectus libero laoreet lectus, eu luctus sem odio non felis. Pellentesque vitae orci quis tortor egestas dapibus at maximus lacus. Vestibulum varius diam euismod nisi tristique ornare. Ut tincidunt, arcu nec sodales vestibulum, turpis ante condimentum turpis, id venenatis urna massa sed ex. Mauris ante magna, luctus sit amet est vitae, accumsan tempor enim. Fusce neque purus, scelerisque ut porttitor posuere, molestie sit amet magna. Morbi eget aliquam leo. Sed quis placerat nisl, eu aliquam diam. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nam sagittis ligula a vestibulum congue. Nam mattis volutpat est eget pharetra. Sed consectetur blandit molestie. ",
+                    anames[rand.nextInt(anames.length)],
                     rand.nextInt(20), pet, "tojestbezsensu",
                     "Łódzkie", "Widzew", "Łódź", tags, new ArrayList<>()
             );

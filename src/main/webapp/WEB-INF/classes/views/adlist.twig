@@ -43,7 +43,9 @@
 		<ul class="collection">
 		{% for ad in advertisements %}
 		    <li class="collection-item left-align">
-				<h5>{{ ad.getTitle }}</h5>
+				<h5><a href="{{ '/advertisement' | path }}/{{ ad.getId }}">
+						{{ ad.getTitle }}
+				</a></h5>
 				<p>
 					{% if ad.getLocation %}
 						{% if ad.getLocation.getCommune %}
