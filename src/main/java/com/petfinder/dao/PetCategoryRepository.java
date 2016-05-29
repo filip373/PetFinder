@@ -13,6 +13,9 @@ public interface PetCategoryRepository
 
     @Transactional
     List<PetCategory> findByName(String name);
+    
+    @Transactional
+    List<PetCategory> findByNameContaining(String name);
 
     @Transactional
     Page<PetCategory> findByName(String name, Pageable pageable);

@@ -1,15 +1,19 @@
 package com.petfinder.dao;
 
-import com.petfinder.domain.*;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
-
-import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.List;
+
+import javax.transaction.Transactional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.CrudRepository;
+
+import com.petfinder.domain.Advertisement;
+import com.petfinder.domain.Location;
+import com.petfinder.domain.Pet;
+import com.petfinder.domain.Tag;
+import com.petfinder.domain.User;
 
 public interface AdvertisementRepository
         extends CrudRepository<Advertisement, Long> {
@@ -32,7 +36,16 @@ public interface AdvertisementRepository
 
     @Transactional
     Page<Advertisement> findByPet(Pet pet, Pageable pageable);
-
+    
+    @Transactional
+    Page<Advertisement> findByPetInAndTitleContainingAndLocationInAndTagsIn(
+    	Collection<Pet> pets, 
+    	String title,
+    	Collection<Location> locations,
+    	Collection<Tag> tags,
+    	Pageable pageable
+    );
+    
     @Transactional
     List<Advertisement> findByLocation(Location location);
 
@@ -44,4 +57,5 @@ public interface AdvertisementRepository
 
     @Transactional
     Page<Advertisement> findByTitleContaining(String title, Pageable pageable);
+    
 }
