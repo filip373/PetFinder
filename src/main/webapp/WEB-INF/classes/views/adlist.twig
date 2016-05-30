@@ -1,32 +1,36 @@
 {% extends 'template.twig' %}
 {% block title %}Latest advertisements{% endblock %}
 {% block content %}
+	<h2>Advertisements</h2>
 	<div class="row">
-	    <h4 class="grey-text text-darken-1">Search Advertisements!</h2>
 	    <form action="{{ '/searchResult' | path }}" method="post" id="searchForm"
           enctype="multipart/form-data">
-	        <div class="input-field col s6">
-                <label class="sr-only" for="login">Advertisement Information</label>
+			<div class="row">
+	        <div class="input-field col s3">
 		        <input type="text" id="adInfo" name="adInfo"
-		               class="form-control" placeholder="Advertisement Title">
-	        </div>
-	        <div class="input-field col s6">
-                <label class="sr-only" for="login">Pet Information</label>
+		               class="validate" placeholder="Advertisement title">
+				<label class="sr-only" for="adInfo">Title</label>
+			</div>
+	        <div class="input-field col s3">
 		        <input type="text" id="petInfo" name="petInfo"
-		               class="form-control" placeholder="Pet Name/Category/Race">
-	        </div>
-	        <div class="input-field col s6">
-                <label class="sr-only" for="login">Location Information</label>
+		               class="validate" placeholder="Name/Category/Race">
+				<label class="sr-only" for="petInfo">Pet</label>
+			</div>
+	        <div class="input-field col s3">
 		        <input type="text" id="locationInfo" name="locationInfo"
-		               class="form-control" placeholder="Location Voivodership/Commune/Place">
-	        </div>
-	        <div class="input-field col s6">
-                <label class="sr-only" for="login">Tags</label>
+		               class="validate" placeholder="Voivodership/Commune/Place">
+				<label class="sr-only" for="locationInfo">Location</label>
+			</div>
+	        <div class="input-field col s3">
 		        <input type="text" id="tagInfo" name="tagInfo"
-		               class="form-control" placeholder="Tags">
-	        </div>	        
+		               class="validate" placeholder="Tags">
+				<label class="sr-only" for="tagInfo">Tags</label>
+			</div>
+			</div>
+
 	        <input type="hidden" name="{{ csrf.parameterName }}" value="{{ csrf.token }}" />
 	        <input type="hidden" name="page" value="1" />
+
 	        <div class="form-actions clearfix">
 	            <button class="btn btn-success btn-lg" type="submit">
 	                {% block buttonFormLabel %} Search {% endblock %}
@@ -34,25 +38,43 @@
 	        </div>
 	    </form>
 	</div>
-	<div id ="Ads">
+
+	<p id="Ads">
+		<ul class="collection">
 		{% for ad in advertisements %}
-		    <div class="row">
-		    <h4 class="grey-text text-lighten-2">{{ ad.getTitle }}</h4>
-		        <strong>Date</strong>:
-		        {{ ad.getCreatedDate | date('yyyy-MM-dd HH:mm') }} 
-		
-		        {% if ad.getUser %}
-		            <strong>Author</strong>: {{ ad.getUser }} 
-		        {% endif %}
-		
-		        {% if ad.getTags %}
-		            <strong>Tags</strong>:
-		            {% for tag in ad.getTags %}
-		                <span class="label label-primary">#{{ tag.getName }}</span>
-		            {% endfor %}
-		        {% endif %}
-		    </div>
+		    <li class="collection-item left-align">
+				<h5><a href="{{ '/advertisement' | path }}/{{ ad.getId }}">
+						{{ ad.getTitle }}
+				</a></h5>
+				<p>
+					{% if ad.getLocation %}
+						{% if ad.getLocation.getCommune %}
+							{{ ad.getLocation.getCommune }},
+						{% endif %}
+						{% if ad.getLocation.getPlace %}
+							{{ ad.getLocation.getPlace }},
+						{% endif %}
+						{% if ad.getLocation.getVoivodership %}
+							{{ ad.getLocation.getVoivodership }}
+						{% endif %}
+					{% endif %}
+
+					{% if ad.getTags %}
+						{% for tag in ad.getTags %}
+							<div class="chip">{{ tag.getName }}</div>
+						{% endfor %}
+					{% endif %}
+
+					{% if (beans.userService.getLoggedUserName == ad.getUser.getLogin and beans.userService.getLoggedUserName != null) %}
+                   <a href="/getEditAdd?id={{ad.id}}" class="btn-floating" >
+                       Edit
+                   </a>
+                  {% endif %}
+				</p>
+			</li>
 		{% endfor %}
+		</ul>
+
 		{% if pages > 1 %}
 		    <ul class="pagination">
 		        {% if page > 1 %}<li class="waves-effect">

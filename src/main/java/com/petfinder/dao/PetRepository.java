@@ -51,4 +51,6 @@ public interface PetRepository extends CrudRepository<Pet, Long> {
 
     @Transactional
     Page<Pet> findByCategory(PetCategory category, Pageable pageable);
+    
+    List<Pet> findByNameAndRaceAndCategoryAndOwner (String name, String race, PetCategory category, User owner);
 }

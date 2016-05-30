@@ -4,7 +4,6 @@ import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,18 +26,18 @@ public class UserService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	@Transactional
-	public void register(String login, String password, String repeatPassword,
-                         String email)
+    @Transactional
+    public void register(String login, String password, String repeatPassword,
+            String email)
             throws LoginExistsException, EmailExistsException,
             InvalidEmailException, PasswordsDoesNotMatchException {
-		if (isEmailAddressValid(email)) {
-			if (verifyLogin(login) && verifyEmail(email)) {
-				if (password.equals(repeatPassword)) {
-					String passwordHash = hashPassword(password);
-					User user = new User(login, email, passwordHash);
-					userRepository.save(user);
-				} else {
+        if (isEmailAddressValid(email)) {
+            if (verifyLogin(login) && verifyEmail(email)) {
+                if (password.equals(repeatPassword)) {
+                    String passwordHash = hashPassword(password);
+                    User user = new User(login, email, passwordHash);
+                    userRepository.save(user);
+                } else {
                     throw new PasswordsDoesNotMatchException(
                             "Passwords does not match."
                     );
@@ -113,39 +112,49 @@ public class UserService {
 		return true;
 	}
 
-	private String hashPassword(String password) {
-		PasswordEncoder encoder = new BCryptPasswordEncoder();
-        return encoder.encode(password);
-	}
+    public String getLoggedUserName() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof String) {
+            return null;
+        } else {
+            org.springframework.security.core.userdetails.User loggedUser = (org.springframework.security.core.userdetails.User) principal;
+            return loggedUser.getUsername();
+        }
+    }
 
-	private boolean verifyLogin(String login) throws LoginExistsException {
+    private String hashPassword(String password) {
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder.encode(password);
+    }
+
+    private boolean verifyLogin(String login) throws LoginExistsException {
         Boolean exists = userRepository.existsByLogin(login);
         if (!exists) {
             return true;
         }
-		throw new LoginExistsException(
+        throw new LoginExistsException(
                 String.format("User '%s' already exists.", login)
         );
-	}
+    }
 
-	private boolean verifyEmail(String email) throws EmailExistsException {
+    private boolean verifyEmail(String email) throws EmailExistsException {
         Boolean exists = userRepository.existsByEmail(email);
         if (!exists) {
             return true;
         }
-		throw new EmailExistsException(
+        throw new EmailExistsException(
                 String.format("Email '%s' is already used.", email)
         );
-	}
+    }
 
-	private boolean isEmailAddressValid(String email) throws InvalidEmailException {
-		boolean valid = EmailValidator.getInstance().isValid(email);
-		if (valid) {
-			return true;
-		} else {
-			throw new InvalidEmailException(
+    private boolean isEmailAddressValid(String email) throws InvalidEmailException {
+        boolean valid = EmailValidator.getInstance().isValid(email);
+        if (valid) {
+            return true;
+        } else {
+            throw new InvalidEmailException(
                     "Given email address is not valid."
             );
-		}
-	}
+        }
+    }
 }
