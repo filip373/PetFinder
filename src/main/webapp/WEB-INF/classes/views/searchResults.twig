@@ -1,71 +1,92 @@
 <ul class="collection">
 	{% for ad in advertisements %}
-		<li class="collection-item left-align">
-			<h5>
-				<a href="{{ '/advertisement' | path }}/{{ ad.getId }}">
-					{{ ad.getTitle }}
-				</a>
-				{% if (beans.userService.getLoggedUserName == ad.getUser.getLogin and beans.userService.getLoggedUserName != null) %}
-					<a href="/getEditAdd?id={{ad.id}}"
-					   class="btn-floating waves-effect waves-light red" >
-						<i class="material-icons">edit</i>
+		    <li class="collection-item left-align">
+				<h5>
+					<a href="{{ '/advertisement' | path }}/{{ ad.getId }}">
+						{{ ad.getTitle }}
 					</a>
-				{% endif %}
-			</h5>
-			<p>
-				{% if ad.getLocation %}
-					{% if ad.getLocation.getCommune %}
-						{{ ad.getLocation.getCommune }},
+					{% if (beans.userService.getLoggedUserName == ad.getUser.getLogin and beans.userService.getLoggedUserName != null) %}
+						<a href="/getEditAdd?id={{ad.id}}"
+						   class="btn-floating waves-effect waves-light red" >
+							<i class="material-icons">edit</i>
+						</a>
 					{% endif %}
-					{% if ad.getLocation.getPlace %}
-						{{ ad.getLocation.getPlace }},
+				</h5>
+				<p>
+					{% if ad.getLocation %}
+						{% if ad.getLocation.getCommune %}
+							{{ ad.getLocation.getCommune }},
+						{% endif %}
+						{% if ad.getLocation.getPlace %}
+							{{ ad.getLocation.getPlace }},
+						{% endif %}
+						{% if ad.getLocation.getVoivodership %}
+							{{ ad.getLocation.getVoivodership }}
+						{% endif %}
 					{% endif %}
-					{% if ad.getLocation.getVoivodership %}
-						{{ ad.getLocation.getVoivodership }}
-					{% endif %}
-				{% endif %}
 
-				{% if ad.getTags %}
-				{% for tag in ad.getTags %}
-			<div class="chip">{{ tag.getName }}</div>
-			{% endfor %}
-			{% endif %}
-			</p>
-		</li>
-	{% endfor %}
+					{% if ad.getTags %}
+						{% for tag in ad.getTags %}
+							<div class="chip">{{ tag.getName }}</div>
+						{% endfor %}
+					{% endif %}
+				</p>
+			</li>
+		{% endfor %}
 </ul>
 
 {% if pages > 1 %}
 	<ul class="pagination">
 		{% if page > 1 %}<li>
-			<a href="{{ '/latest/%d' | format(page - 1) | path }}"
-			   aria-label="Previous" class="btn-floating blue darken-2">
-				<span aria-hidden="true">&laquo;</span>
-			</a>
+    		<form action="{{ '/searchResult' | path }}" method="post" id="searchForm"
+	          enctype="multipart/form-data">
+			        <input type="hidden" id="adInfo" name="adInfo" value="{{ adInfo }}">
+			        <input type="hidden" id="petInfo" name="petInfo" value="{{ petInfo }}">
+			        <input type="hidden" id="locationInfo" name="locationInfo" value="{{ locationInfo }}">
+			        <input type="hidden" id="tagInfo" name="tagInfo" value="{{ tagInfo }}">  
+		        <input type="hidden" name="{{ csrf.parameterName }}" value="{{ csrf.token }}" />
+		        <input type="hidden" name="page" value="{{ format(page - 1) }}" />
+		            <button type="submit" class="btn-floating">
+		                &laquo;
+		            </button>
+		    </form>
 			</li>{% endif %}
 		{% if firstpage > 1 %}
 			<li><span aria-hidden="true">...</span></li>
 		{% endif %}
-		{% for p in printPages %}
-			{% if p == page %}
-				<li>
-					<a href="{{ '/latest/%d' | format(p) | path }}" class="btn-floating blue lighten-4">{{ p }}</a>
-				</li>
-			{% else %}
-				<li>
-					<a href="{{ '/latest/%d' | format(p) | path }}" class="btn-floating blue">{{ p }}</a>
-				</li>
-			{% endif %}
-		{% endfor %}
+        {% for p in printPages %}          
+            <li {% if p == page %} class="active" {% endif %}>
+        		<form action="{{ '/searchResult' | path }}" method="post" id="searchForm"
+		          enctype="multipart/form-data">
+				        <input type="hidden" id="adInfo" name="adInfo" value="{{ adInfo }}">
+				        <input type="hidden" id="petInfo" name="petInfo" value="{{ petInfo }}">
+				        <input type="hidden" id="locationInfo" name="locationInfo" value="{{ locationInfo }}">
+				        <input type="hidden" id="tagInfo" name="tagInfo" value="{{ tagInfo }}">  
+			        <input type="hidden" name="{{ csrf.parameterName }}" value="{{ csrf.token }}" />
+			        <input type="hidden" name="page" value="{{ p }}" />
+			            <button type="submit" class="btn-floating blue">
+			                {{ p }}
+			            </button>
+			    </form>
+            </li>
+        {% endfor %}
 		{% if lastpage < pages %}
 			<li><span aria-hidden="true">...</span></li>
 		{% endif %}
 		{% if page < pages %}
 			<li>
-				<a href="{{ '/latest/%d' | format(page + 1) | path }}"
-				   class="btn-floating blue darken-2" aria-label="Next">
-					<span aria-hidden="true">&raquo;</span>
-				</a>
+    		<form action="{{ '/searchResult' | path }}" method="post" id="searchForm"
+	          enctype="multipart/form-data">
+			        <input type="hidden" id="adInfo" name="adInfo" value="{{ adInfo }}">
+			        <input type="hidden" id="petInfo" name="petInfo" value="{{ petInfo }}">
+			        <input type="hidden" id="locationInfo" name="locationInfo" value="{{ locationInfo }}">
+			        <input type="hidden" id="tagInfo" name="tagInfo" value="{{ tagInfo }}">  
+		        <input type="hidden" name="{{ csrf.parameterName }}" value="{{ csrf.token }}" />
+		        <input type="hidden" name="page" value="{{ format(page + 1) }}" />
+		            <button type="submit" class="btn-floating blue">
+		                &raquo;
+		            </button>
+		    </form>
 			</li>
 		{% endif %}
 	</ul>
