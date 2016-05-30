@@ -15,7 +15,6 @@ import com.petfinder.exception.EmailExistsException;
 import com.petfinder.exception.InvalidEmailException;
 import com.petfinder.exception.LoginExistsException;
 import com.petfinder.exception.PasswordsDoesNotMatchException;
-import org.springframework.security.core.Authentication;
 
 @Service
 public class UserService {
