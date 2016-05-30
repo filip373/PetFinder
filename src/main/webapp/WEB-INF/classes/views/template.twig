@@ -17,6 +17,7 @@
 						      <li><a href="/getNewAdd">Add Poster</a></li>
 						      {% if(beans.userService.checkIfUserIsLogged == true) %}
 						          <li><a href="{{'/logout' | path }}">Logout</a></li>
+						          <li><a href="{{'/profile' | path }}">Profile</a></li>
 						      {% else %}
 						   		  <li><a href="{{'/login' | path }}">Login</a></li>
 						      	  <li><a href="{{'/register' | path }}">Register</a></li>

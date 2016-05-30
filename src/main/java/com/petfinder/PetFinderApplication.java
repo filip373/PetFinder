@@ -24,7 +24,7 @@ public class PetFinderApplication {
     AdvertisementService advertisementService = new AdvertisementService();
     
     @Autowired
-    UserService userService = new UserService();    
+    UserService userService = new UserService();
 
 	public static void main(String[] args) {
 		SpringApplication.run(PetFinderApplication.class, args);
