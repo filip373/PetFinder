@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="row">
-    <h2 class="grey-text text-lighten-2">Add Poster</h2>
+    <h2 class="grey-text text-lighten-2">Edit Poster</h2>
     {% if statusEmpty %}
 		<div class="row">
 		    <div class="alert alert-danger col-md-6 col-md-offset-3 text-center"
@@ -21,8 +21,9 @@
 		    </div>
 		</div>
 	{% endif %}
-    <form action="{{ '/newAdd' | path }}" method="post"
+    <form action="{{ '/editAdd' | path }}" method="post"
           enctype="multipart/form-data">
+<input type="hidden" id="id" name="id" value="{{ addId }}">    
     	<label for="title">Title</label>
         <input type="text" id="title" name="title" value="{{ advertisement.getTitle }}"
                class="form-control" placeholder="Title">                  
@@ -49,9 +50,8 @@
 		<div class="input-field col s6">
 	        <label class="categoryLabel" for="categoryName">Category name</label>
                 <select name="categoryName">
-                    <option value="" selected>Select</option>
 		    {% for category in categories %}
-                    <option value="{{category.getId}}">{{category.getName}}</option>
+                        <option value="{{category.getId}}" {% if category.getId==advertisement.getPet.getCategory.getId %} selected {% endif %}>{{category.getName}}</option>
 		    {% endfor %}
                 </select>
 		</div>
@@ -81,13 +81,26 @@
         <input type="text" id="tagsString" name="tagsString" value="{{ tags }}"
                class="form-control" placeholder="Tags">
         </div>
+        <div class="input-field col s12">
+            <div class="row">
+                        {% if files %}
+                    <strong>File</strong>:
+                    {% for file in files %}
+                        <span class="label label-primary">#{{ file.getUri }}</span>
+                    <a href="/removeAttachment?idAdd={{ addId }}&idAttachment={{file.getId}}&title={{advertisement.getTitle}}&content={{advertisement.getContent}}&petName={{advertisement.getPet.getName}}&age={{advertisement.getPet.getAge}}&race={{advertisement.getPet.getRace}}&categoryName={{advertisement.getPet.getCategory.getId}}&voivodership={{advertisement.getLocation.getVoivodership}}&commune={{advertisement.getLocation.getCommune}}&place={{advertisement.getLocation.getPlace}}&tagsString={{tags}}" class="btn-floating" >
+                        Remove
+                    </a>
+                    {% endfor %}
+                {% endif %} 
+            </div>
+         </div>
         <div class="file-field input-field col s12">
 	    	<div class="btn">
 	        	<span>Image</span>
-	        	<input type="file" accept="image/*" id="image" name="image">
+	        	<input type="file" accept="image/*" id="image" name="image" value"proba.png">
 	      	</div>
 	      	<div class="file-path-wrapper">
-	        	<input class="file-path validate" type="text" >
+	        	<input class="file-path validate" type="text">
 	      	</div>
 	    </div>
 	    <div class="file-field input-field col s12">
@@ -102,7 +115,7 @@
 		<input type="hidden" name="{{ csrf.parameterName }}" value="{{ csrf.token }}" />
 		<div class="col s12">
 	        <button type="submit" class="btn btn-success center-block">
-	            Add 
+	            Edit 
 	        </button>
         </div>
     </form>

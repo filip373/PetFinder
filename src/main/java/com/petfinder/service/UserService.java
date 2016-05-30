@@ -15,75 +15,84 @@ import com.petfinder.exception.EmailExistsException;
 import com.petfinder.exception.InvalidEmailException;
 import com.petfinder.exception.LoginExistsException;
 import com.petfinder.exception.PasswordsDoesNotMatchException;
+import org.springframework.security.core.Authentication;
 
 @Service
 public class UserService {
 
-	@Autowired
-	private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-	@Transactional
-	public void register(String login, String password, String repeatPassword,
-                         String email)
+    @Transactional
+    public void register(String login, String password, String repeatPassword,
+            String email)
             throws LoginExistsException, EmailExistsException,
             InvalidEmailException, PasswordsDoesNotMatchException {
-		if (isEmailAddressValid(email)) {
-			if (verifyLogin(login) && verifyEmail(email)) {
-				if (password.equals(repeatPassword)) {
-					String passwordHash = hashPassword(password);
-					User user = new User(login, email, passwordHash);
-					userRepository.save(user);
-				} else {
+        if (isEmailAddressValid(email)) {
+            if (verifyLogin(login) && verifyEmail(email)) {
+                if (password.equals(repeatPassword)) {
+                    String passwordHash = hashPassword(password);
+                    User user = new User(login, email, passwordHash);
+                    userRepository.save(user);
+                } else {
                     throw new PasswordsDoesNotMatchException(
                             "Passwords does not match."
                     );
                 }
-			}
-		}
-	}
-	
-	public boolean checkIfUserIsLogged()
-	{	
-		if(SecurityContextHolder.getContext().getAuthentication() 
-		          instanceof AnonymousAuthenticationToken) {
-			return false;
-		}
-		return true;
-	}
+            }
+        }
+    }
 
-	private String hashPassword(String password) {
-		PasswordEncoder encoder = new BCryptPasswordEncoder();
+    public boolean checkIfUserIsLogged() {
+        if (SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken) {
+            return false;
+        }
+        return true;
+    }
+
+    public String getLoggedUserName() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof String) {
+            return null;
+        } else {
+            org.springframework.security.core.userdetails.User loggedUser = (org.springframework.security.core.userdetails.User) principal;
+            return loggedUser.getUsername();
+        }
+    }
+
+    private String hashPassword(String password) {
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
         return encoder.encode(password);
-	}
+    }
 
-	private boolean verifyLogin(String login) throws LoginExistsException {
+    private boolean verifyLogin(String login) throws LoginExistsException {
         Boolean exists = userRepository.existsByLogin(login);
         if (!exists) {
             return true;
         }
-		throw new LoginExistsException(
+        throw new LoginExistsException(
                 String.format("User '%s' already exists.", login)
         );
-	}
+    }
 
-	private boolean verifyEmail(String email) throws EmailExistsException {
+    private boolean verifyEmail(String email) throws EmailExistsException {
         Boolean exists = userRepository.existsByEmail(email);
         if (!exists) {
             return true;
         }
-		throw new EmailExistsException(
+        throw new EmailExistsException(
                 String.format("Email '%s' is already used.", email)
         );
-	}
+    }
 
-	private boolean isEmailAddressValid(String email) throws InvalidEmailException {
-		boolean valid = EmailValidator.getInstance().isValid(email);
-		if (valid) {
-			return true;
-		} else {
-			throw new InvalidEmailException(
+    private boolean isEmailAddressValid(String email) throws InvalidEmailException {
+        boolean valid = EmailValidator.getInstance().isValid(email);
+        if (valid) {
+            return true;
+        } else {
+            throw new InvalidEmailException(
                     "Given email address is not valid."
             );
-		}
-	}
+        }
+    }
 }
