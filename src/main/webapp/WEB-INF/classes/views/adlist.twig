@@ -64,6 +64,12 @@
 							<div class="chip">{{ tag.getName }}</div>
 						{% endfor %}
 					{% endif %}
+
+					{% if (beans.userService.getLoggedUserName == ad.getUser.getLogin and beans.userService.getLoggedUserName != null) %}
+                   <a href="/getEditAdd?id={{ad.id}}" class="btn-floating" >
+                       Edit
+                   </a>
+                  {% endif %}
 				</p>
 			</li>
 		{% endfor %}
