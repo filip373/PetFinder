@@ -4,6 +4,7 @@ import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.petfinder.dao.UserRepository;
 import com.petfinder.domain.User;
 import com.petfinder.exception.EmailExistsException;
+import com.petfinder.exception.EmailsDoesNotMatchException;
 import com.petfinder.exception.InvalidEmailException;
+import com.petfinder.exception.InvalidUserPasswordException;
 import com.petfinder.exception.LoginExistsException;
 import com.petfinder.exception.PasswordsDoesNotMatchException;
 
@@ -21,6 +24,10 @@ public class UserService {
 
 	@Autowired
 	private UserRepository userRepository;
+//	@Autowired
+//	private UserDetailsService myUserDetailsService;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Transactional
 	public void register(String login, String password, String repeatPassword,
@@ -40,6 +47,63 @@ public class UserService {
                 }
 			}
 		}
+	}
+		
+	@Transactional
+	public void changeUserData(String currentPassword, String newPassword, String repeatPassword, String newEmail, String repeatEmail) throws PasswordsDoesNotMatchException, EmailExistsException, EmailsDoesNotMatchException, InvalidUserPasswordException{
+		if(checkIfUserIsLogged()){
+	        String login = SecurityContextHolder.getContext().getAuthentication().getName();
+			User user = userRepository.findOneByLogin(login);
+			if(this.passwordEncoder.matches(currentPassword, user.getPassword())){
+				boolean isPasswordUpdateRequired = passwordNeedsToBeUpdated(newPassword,repeatPassword);
+				boolean isEmailUpdateRequired = emailNeedsToBeUpdated(newEmail,repeatEmail);
+				
+				if(isPasswordUpdateRequired){
+					updatePassword(user,newPassword, repeatPassword);
+				}
+				if(isEmailUpdateRequired){
+					updateEmail(user,newEmail, repeatEmail);
+				}
+				
+				if(isPasswordUpdateRequired == true || isEmailUpdateRequired == true){
+					userRepository.save(user);
+				}
+			} else{
+				throw new InvalidUserPasswordException("User's password is invalid.");
+			}
+		}
+	}
+	
+	private void updateEmail(User user, String newEmail, String repeatEmail) throws EmailExistsException, EmailsDoesNotMatchException{
+		if(newEmail.equals(repeatEmail)){
+			if(verifyEmail(newEmail)){
+				user.setEmail(newEmail);
+			}
+		}	else{
+			throw new EmailsDoesNotMatchException("Given emails does not match.");
+		}
+	}
+	
+	private void updatePassword(User user, String newPassword, String repeatPassword) throws PasswordsDoesNotMatchException{
+		if(newPassword.equals(repeatPassword)){
+			user.setPassword(hashPassword(newPassword));
+		} else{
+			throw new PasswordsDoesNotMatchException("Given passwords does not match.");
+		}
+	}
+	
+	private boolean passwordNeedsToBeUpdated(String newPassword, String repeatPassword){
+		if((newPassword.equals("")||newPassword == null)&&(repeatPassword.equals("")||repeatPassword == null)){
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean emailNeedsToBeUpdated(String newEmail, String repeatEmail){
+		if((newEmail.equals("")||newEmail == null)&&(repeatEmail.equals("")||repeatEmail == null)){
+			return false;
+		}
+		return true;
 	}
 	
 	public boolean checkIfUserIsLogged()

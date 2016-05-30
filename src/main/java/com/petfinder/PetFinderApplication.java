@@ -7,11 +7,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.ViewResolver;
 
 import com.lyncode.jtwig.mvc.JtwigViewResolver;
 import com.petfinder.service.AdvertisementService;
+import com.petfinder.service.MyUserDetailsService;
 import com.petfinder.service.UserService;
 
 @SpringBootApplication
@@ -25,7 +27,10 @@ public class PetFinderApplication {
     AdvertisementService advertisementService = new AdvertisementService();
     
     @Autowired
-    UserService userService = new UserService();    
+    UserService userService = new UserService();
+    
+//    @Autowired
+//    UserDetailsService myUserDetailsService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(PetFinderApplication.class, args);
@@ -38,6 +43,11 @@ public class PetFinderApplication {
         viewResolver.setSuffix(".twig");
         return viewResolver;
     }
+    
+//    @Bean
+//    public UserDetailsService myUserDetailsService(){
+//    	return this.myUserDetailsService;
+//    }
 
     @Bean
     public AdvertisementService advertisementService() {

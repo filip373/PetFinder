@@ -1,0 +1,47 @@
+{% extends 'template.twig' %}
+{% block title %}User profile{% endblock %}
+{% block content %}
+
+{% if status %}
+<div class="row">
+    <div class="alert alert-danger col-md-6 col-md-offset-3 text-center"
+         role="alert">
+        {{ status }}
+    </div>
+</div>
+{% endif %}
+
+<div class="row">
+    <h2 class="grey-text text-lighten-2">Profile</h2>
+
+    <form action="/profile" method="put"
+          enctype="multipart/form-data">
+          
+        <label for="newEmail">New Email address</label>
+        <input type="email" id="newEmail" name="newEmail"
+               class="form-control" placeholder="New Email address">
+               
+        <label for="repeatEmail">Re-enter Email address</label>
+        <input type="email" id="repeatEmail" name="repeatEmail"
+               class="form-control" placeholder="Re-enter Email address">
+
+        <label for="newPassword">New password</label>
+        <input type="password" id="newPassword" name="newPassword"
+               class="form-control" placeholder="New password">
+
+        <label for="repeatPassword">Re-enter password</label>
+        <input type="password" id="repeatPassword" name="repeatPassword"
+               class="form-control" placeholder="Re-enter password">
+               
+        <label for="currentPassword">Current password</label>
+        <input type="password" id="currentPassword" name="currentPassword"
+               class="form-control" placeholder="Current password">
+               
+		<input type="hidden" name="{{ csrf.parameterName }}" value="{{ csrf.token }}" />
+        <button type="submit" class="btn btn-success center-block">
+            Update
+        </button>
+    </form>
+</div>
+
+{% endblock %}

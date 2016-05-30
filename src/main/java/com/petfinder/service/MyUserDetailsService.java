@@ -3,6 +3,7 @@ package com.petfinder.service;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -10,6 +11,7 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -58,4 +60,18 @@ public class MyUserDetailsService implements UserDetailsService {
 		return Result;
 	}
 
+//	public com.petfinder.domain.User getAuthenticatedUser() {
+//        String username = SecurityContextHolder.getContext().getAuthentication()
+//                .getName();
+//        return getAuthenticatedUserByName(username);
+//    }
+// 
+//    private com.petfinder.domain.User getAuthenticatedUserByName(String username)
+//            throws UsernameNotFoundException {
+//        return Optional.ofNullable(userDao.findOneByLogin(username))
+//                .orElseThrow(() -> new UsernameNotFoundException(String.format(
+//                        "AuthUser with username: %s was not found",
+//                        username
+//                )));
+//    }
 }
