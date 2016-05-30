@@ -51,6 +51,11 @@
 		                <span class="label label-primary">#{{ tag.getName }}</span>
 		            {% endfor %}
 		        {% endif %}
+                {% if (beans.userService.getLoggedUserName == ad.getUser.getLogin and beans.userService.getLoggedUserName != null) %}
+                   <a href="/getEditAdd?id={{ad.id}}" class="btn-floating" >
+                       Edit
+                   </a>
+                  {% endif %} 
 		    </div>
 		{% endfor %}
 		{% if pages > 1 %}

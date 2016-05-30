@@ -11,9 +11,12 @@ import java.util.List;
 public interface PetCategoryRepository
         extends CrudRepository<PetCategory, Long> {
 
+    @Override
+    List<PetCategory> findAll();
+
     @Transactional
     List<PetCategory> findByName(String name);
-    
+
     @Transactional
     List<PetCategory> findByNameContaining(String name);
 
