@@ -60,18 +60,4 @@ public class MyUserDetailsService implements UserDetailsService {
 		return Result;
 	}
 
-//	public com.petfinder.domain.User getAuthenticatedUser() {
-//        String username = SecurityContextHolder.getContext().getAuthentication()
-//                .getName();
-//        return getAuthenticatedUserByName(username);
-//    }
-// 
-//    private com.petfinder.domain.User getAuthenticatedUserByName(String username)
-//            throws UsernameNotFoundException {
-//        return Optional.ofNullable(userDao.findOneByLogin(username))
-//                .orElseThrow(() -> new UsernameNotFoundException(String.format(
-//                        "AuthUser with username: %s was not found",
-//                        username
-//                )));
-//    }
 }

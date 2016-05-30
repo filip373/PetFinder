@@ -28,9 +28,6 @@ public class PetFinderApplication {
     
     @Autowired
     UserService userService = new UserService();
-    
-//    @Autowired
-//    UserDetailsService myUserDetailsService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(PetFinderApplication.class, args);
@@ -43,11 +40,6 @@ public class PetFinderApplication {
         viewResolver.setSuffix(".twig");
         return viewResolver;
     }
-    
-//    @Bean
-//    public UserDetailsService myUserDetailsService(){
-//    	return this.myUserDetailsService;
-//    }
 
     @Bean
     public AdvertisementService advertisementService() {
