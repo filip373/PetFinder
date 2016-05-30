@@ -77,7 +77,7 @@ public class UserController {
         return "profile";
     }
 	
-	@RequestMapping(value = "/profile", method = RequestMethod.PUT)
+	@RequestMapping(value = "/profile", method = RequestMethod.POST)
 	public String updateProfileData(@RequestParam(required = false) String currentPassword,
 			@RequestParam(required = false) String newPassword,
             @RequestParam(required = false) String repeatPassword,
