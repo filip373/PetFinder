@@ -3,8 +3,8 @@
 	<head>
 	    <title>{% block title %}{% endblock %} - PetFinder</title>
 	    <meta charset="text/html; charset=UTF-8">
-	    <link rel="stylesheet" href="materialize/dist/css/materialize.min.css">
-	    <link rel="stylesheet" href="css/custom.css">
+	    <link rel="stylesheet" href="/materialize/dist/css/materialize.min.css">
+	    <link rel="stylesheet" href="/css/custom.css">
 	</head>
 	<body>
 		<nav class="navbar navbar-inverse">
@@ -12,7 +12,7 @@
 	            <nav class="blue darken-3">
 	                <div class="container">
 	                    <div class="nav-wrapper">
-	                        <ul>
+	                        <ul class="left">
 						      <li><a href="/">Home</a></li>
 						      <li><a href="/getNewAdd">Add Poster</a></li>
 						      {% if(beans.userService.checkIfUserIsLogged == true) %}
@@ -22,12 +22,27 @@
 						      	  <li><a href="{{'/register' | path }}">Register</a></li>
 						      {% endif %}
 		    				</ul>
+
+							<ul class="right">
+								{% if(beans.userService.checkIfUserIsLogged == true) %}
+									<li><a href="{{'/logout' | path }}">
+										Logout
+									</a></li>
+								{% else %}
+									<li><a href="{{'/register' | path }}">
+										Register
+									</a></li>
+									<li><a href="{{'/login' | path }}">
+										Login
+									</a></li>
+								{% endif %}
+							</ul>
 	                    </div>
 	                </div>
 	            </nav>
 	        </div>
 		</nav>
-	    <div class="container center">
+	    <div class="container">
 			{% block content %}{% endblock %}
 	    </div>
 	    <main>

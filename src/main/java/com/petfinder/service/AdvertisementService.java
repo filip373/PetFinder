@@ -1,28 +1,13 @@
 package com.petfinder.service;
 
+import com.petfinder.dao.*;
+import com.petfinder.domain.*;
 import com.petfinder.controller.AdvertisementController;
 import java.util.List;
-
 import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-
-import com.petfinder.dao.AdvertisementRepository;
-import com.petfinder.dao.AttachmentRepository;
-import com.petfinder.dao.LocationRepository;
-import com.petfinder.dao.PetCategoryRepository;
-import com.petfinder.dao.PetRepository;
-import com.petfinder.dao.TagRepository;
-import com.petfinder.dao.UserRepository;
-import com.petfinder.domain.Advertisement;
-import com.petfinder.domain.Attachment;
-import com.petfinder.domain.Location;
-import com.petfinder.domain.Pet;
-import com.petfinder.domain.PetCategory;
-import com.petfinder.domain.Tag;
-import com.petfinder.domain.User;
 import com.petfinder.exception.UserDoesNotHavePermissionToAdvertisemntException;
 import java.io.File;
 import java.util.logging.Level;
@@ -74,6 +59,10 @@ public class AdvertisementService {
     @Transactional
     public List<Advertisement> getLatestAdvertisements(int page) {
         return getLatestAdvertisements(page, 20);
+    }
+
+    public Advertisement getAdvertisement(long id) {
+        return advertisementRepository.findOne(id);
     }
 
     @Transactional

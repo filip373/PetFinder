@@ -1,10 +1,12 @@
 package com.petfinder.controller;
 
 import com.petfinder.domain.Advertisement;
+import com.petfinder.domain.Attachment;
+import com.petfinder.domain.Tag;
+import com.petfinder.service.AdvertisementService;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,14 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.petfinder.domain.Attachment;
 import com.petfinder.domain.Location;
 import com.petfinder.domain.Pet;
 import com.petfinder.domain.PetCategory;
-import com.petfinder.domain.Tag;
 import com.petfinder.exception.UserDoesNotHavePermissionToAdvertisemntException;
-import com.petfinder.service.AdvertisementService;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -56,6 +54,17 @@ public class AdvertisementController {
                 advertisementService.getLatestAdvertisements(page - 1)
         );
         return "adlist";
+    }
+
+    @RequestMapping(value = "/advertisement/{id}")
+    public String advertisement(@PathVariable long id, Model model) {
+        Advertisement ad = advertisementService.getAdvertisement(id);
+        model.addAttribute("notfound", 0);
+        if (ad == null) {
+            model.addAttribute("notfound", id);
+        }
+        model.addAttribute("ad", ad);
+        return "advertisement";
     }
 
     @RequestMapping(value = "/newAdd")
