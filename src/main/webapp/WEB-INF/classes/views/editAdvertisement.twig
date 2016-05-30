@@ -73,9 +73,11 @@
 			</div>
 			<div class="input-field col s3">
 				<select id="categoryName" name="categoryName">
-					<option value="" selected>Select...</option>
 					{% for category in categories %}
-						<option value="{{category.getId}}">
+						<option value="{{category.getId}}"
+                        {% if category.getId == advertisement.getPet.getCategory.getId %}
+                        selected
+                        {% endif %}>
 							{{category.getName}}
 						</option>
 					{% endfor %}
