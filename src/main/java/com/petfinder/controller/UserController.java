@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.petfinder.exception.EmailExistsException;
+import com.petfinder.exception.EmailsDoesNotMatchException;
 import com.petfinder.exception.InvalidEmailException;
+import com.petfinder.exception.InvalidUserPasswordException;
 import com.petfinder.exception.LoginExistsException;
 import com.petfinder.exception.PasswordsDoesNotMatchException;
 import com.petfinder.service.UserService;
@@ -68,6 +70,31 @@ public class UserController {
 
 		return model;
 
+	}
+	
+    @RequestMapping(value = "/profile", method = RequestMethod.GET)
+    public String profileView(Model model) {
+        return "profile";
+    }
+	
+	@RequestMapping(value = "/profile", method = RequestMethod.POST)
+	public String updateProfileData(@RequestParam(required = false) String currentPassword,
+			@RequestParam(required = false) String newPassword,
+            @RequestParam(required = false) String repeatPassword,
+            @RequestParam(required = false) String newEmail,
+            @RequestParam(required = false) String repeatEmail,
+            Model model){
+		
+		try {
+			userservice.changeUserData(currentPassword,newPassword,repeatPassword,newEmail,repeatEmail);
+		} catch (PasswordsDoesNotMatchException | EmailExistsException | EmailsDoesNotMatchException
+				| InvalidUserPasswordException e) {
+            model.addAttribute("status", e.getMessage());
+            return "profile";
+		}
+		
+        model.addAttribute("status", "User successfuly updated.");
+        return "profile";
 	}
 
 }
