@@ -10,7 +10,7 @@ $(document).ready(function(){
 
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/searchResult",
+            url: $(this).attr('action'),
             data: $(this).serialize(),
             success: function (data) {
                 $('#Ads').html(data);
