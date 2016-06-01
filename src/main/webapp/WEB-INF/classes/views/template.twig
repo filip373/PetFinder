@@ -14,18 +14,14 @@
 	                    <div class="nav-wrapper">
 	                        <ul class="left">
 						      <li><a href="/">Home</a></li>
-						      <li><a href="/getNewAdd">Add Poster</a></li>
-						      {% if(beans.userService.checkIfUserIsLogged == true) %}
-						          <li><a href="{{'/logout' | path }}">Logout</a></li>
-						          <li><a href="{{'/profile' | path }}">Profile</a></li>
-						      {% else %}
-						   		  <li><a href="{{'/login' | path }}">Login</a></li>
-						      	  <li><a href="{{'/register' | path }}">Register</a></li>
-						      {% endif %}
+							{% if(beans.userService.checkIfUserIsLogged == true) %}
+						      <li><a href="/getNewAdd">Add</a></li>
+							{% endif %}
 		    				</ul>
 
 							<ul class="right">
 								{% if(beans.userService.checkIfUserIsLogged == true) %}
+									<li><a href="{{'/profile' | path }}">Profile</a></li>
 									<li><a href="{{'/logout' | path }}">
 										Logout
 									</a></li>
@@ -56,9 +52,9 @@
 	        </div>
 	    </footer>
 	    {% block javascripts %}
-			<script type="text/javascript" src="jquery/dist/jquery.min.js"></script>
-	        <script type="text/javascript" src="materialize/dist/js/materialize.min.js"></script>
-	        <script type="text/javascript" src="js/custom.js"></script>
+			<script type="text/javascript" src="/jquery/dist/jquery.min.js"></script>
+	        <script type="text/javascript" src="/materialize/dist/js/materialize.min.js"></script>
+	        <script type="text/javascript" src="/js/custom.js"></script>
 	        {% block additonalJavaScripts %}{% endblock %}
 	    {% endblock %}
 	</body>

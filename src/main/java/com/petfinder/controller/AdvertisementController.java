@@ -19,6 +19,8 @@ import com.petfinder.domain.Location;
 import com.petfinder.domain.Pet;
 import com.petfinder.domain.PetCategory;
 import com.petfinder.exception.UserDoesNotHavePermissionToAdvertisemntException;
+import com.petfinder.rest.domain.SearchResults;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -261,14 +263,21 @@ public class AdvertisementController {
             @RequestParam(required = false) String tagInfo,
             @RequestParam(required = false) int page
     ) {
+    	SearchResults searchResults = advertisementService.getSearchedAdvertisements(
+    			page - 1, 20, 
+    			adInfo, petInfo, 
+    			locationInfo, 
+    			tagInfo
+    	);
         model.addAttribute("advertisements",
-                advertisementService.getSearchedAdvertisements(page - 1, 20, adInfo, petInfo, locationInfo, tagInfo)
+                searchResults.getAdvertisements()
         );
         this.preparePagination(model, page);
         model.addAttribute("adInfo", adInfo);
         model.addAttribute("petInfo", petInfo);
         model.addAttribute("locationInfo", locationInfo);
         model.addAttribute("tagInfo", tagInfo);
+        model.addAttribute("pages", (long) Math.ceil(searchResults.getAllResultsCount()/ 20)+1);
         return new ModelAndView("searchResults");
     }
 

@@ -2,11 +2,14 @@
 {% block title %}User registered successfully{% endblock %}
 {% block content %}
 
-<div class="row">
-    <div class="alert alert-success col-md-6 col-md-offset-3 text-center"
-         role="alert">
-        User '{{ login }}' has been registered successfully.
+    <div class="row">
+        <div class="col s8 offset-s2" role="alert">
+            <div class="card green darken-1">
+                <div class="card-content white-text">
+                    <p>User '{{ login }}' has been registered successfully.</p>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 
 {% endblock %}

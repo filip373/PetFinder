@@ -1,31 +1,31 @@
 {% extends 'template.twig' %}
 {% block title %}Latest advertisements{% endblock %}
 {% block content %}
-	<h2>Advertisements</h2>
+	<h3 class="grey-text text-darken-1">Advertisements</h3>
 	<div class="row">
 	    <form action="{{ '/searchResult' | path }}" method="post" id="searchForm"
           enctype="multipart/form-data">
 			<div class="row">
-	        <div class="input-field col s3">
-		        <input type="text" id="adInfo" name="adInfo"
-		               class="validate" placeholder="Advertisement title">
-				<label class="sr-only" for="adInfo">Title</label>
-			</div>
-	        <div class="input-field col s3">
-		        <input type="text" id="petInfo" name="petInfo"
-		               class="validate" placeholder="Name/Category/Race">
-				<label class="sr-only" for="petInfo">Pet</label>
-			</div>
-	        <div class="input-field col s3">
-		        <input type="text" id="locationInfo" name="locationInfo"
-		               class="validate" placeholder="Voivodership/Commune/Place">
-				<label class="sr-only" for="locationInfo">Location</label>
-			</div>
-	        <div class="input-field col s3">
-		        <input type="text" id="tagInfo" name="tagInfo"
-		               class="validate" placeholder="Tags">
-				<label class="sr-only" for="tagInfo">Tags</label>
-			</div>
+                <div class="input-field col s3">
+                    <input type="text" id="adInfo" name="adInfo"
+                           class="validate">
+                    <label for="adInfo">Title</label>
+                </div>
+                <div class="input-field col s3">
+                    <input type="text" id="petInfo" name="petInfo"
+                           class="validate">
+                    <label for="petInfo">Pet</label>
+                </div>
+                <div class="input-field col s3">
+                    <input type="text" id="locationInfo" name="locationInfo"
+                           class="validate">
+                    <label for="locationInfo">Location</label>
+                </div>
+                <div class="input-field col s3">
+                    <input type="text" id="tagInfo" name="tagInfo"
+                           class="validate">
+                    <label for="tagInfo">Tags</label>
+                </div>
 			</div>
 
 	        <input type="hidden" name="{{ csrf.parameterName }}" value="{{ csrf.token }}" />
@@ -39,13 +39,21 @@
 	    </form>
 	</div>
 
-	<p id="Ads">
+	<div id="Ads">
 		<ul class="collection">
 		{% for ad in advertisements %}
 		    <li class="collection-item left-align">
-				<h5><a href="{{ '/advertisement' | path }}/{{ ad.getId }}">
+				<h5>
+					<a href="{{ '/advertisement' | path }}/{{ ad.getId }}">
 						{{ ad.getTitle }}
-				</a></h5>
+					</a>
+					{% if (beans.userService.getLoggedUserName == ad.getUser.getLogin and beans.userService.getLoggedUserName != null) %}
+						<a href="/getEditAdd?id={{ad.id}}"
+						   class="btn-floating waves-effect waves-light red" >
+							<i class="material-icons">edit</i>
+						</a>
+					{% endif %}
+				</h5>
 				<p>
 					{% if ad.getLocation %}
 						{% if ad.getLocation.getCommune %}
@@ -64,12 +72,6 @@
 							<div class="chip">{{ tag.getName }}</div>
 						{% endfor %}
 					{% endif %}
-
-					{% if (beans.userService.getLoggedUserName == ad.getUser.getLogin and beans.userService.getLoggedUserName != null) %}
-                   <a href="/getEditAdd?id={{ad.id}}" class="btn-floating" >
-                       Edit
-                   </a>
-                  {% endif %}
 				</p>
 			</li>
 		{% endfor %}
@@ -77,9 +79,9 @@
 
 		{% if pages > 1 %}
 		    <ul class="pagination">
-		        {% if page > 1 %}<li class="waves-effect">
+		        {% if page > 1 %}<li>
 		            <a href="{{ '/latest/%d' | format(page - 1) | path }}"
-		               aria-label="Previous" class="btn-floating">
+		               aria-label="Previous" class="btn-floating grey">
 		                <span aria-hidden="true">&laquo;</span>
 		            </a>
 		        </li>{% endif %}
@@ -88,24 +90,26 @@
 		        {% endif %}
 		        {% for p in printPages %}
 		            {% if p == page %}
-		                <li class="active" class="waves-effect">
-		                    <a href="{{ '/latest/%d' | format(p) | path }}" class="btn-floating">{{ p }}</a>
+		                <li>
+		                    <a href="{{ '/latest/%d' | format(p) | path }}" class="btn-floating blue">{{ p }}</a>
 		                </li>
 		            {% else %}
 		                <li>
-		                    <a href="{{ '/latest/%d' | format(p) | path }}" class="btn-floating">{{ p }}</a>
+		                    <a href="{{ '/latest/%d' | format(p) | path }}" class="btn-floating grey">{{ p }}</a>
 		                </li>
 		            {% endif %}
 		        {% endfor %}
 		        {% if lastpage < pages %}
 		            <li><span aria-hidden="true">...</span></li>
 		        {% endif %}
-		        {% if page < pages %}<li class="waves-effect">
-		            <a href="{{ '/latest/%d' | format(page + 1) | path }}" class="btn-floating"
-		               aria-label="Next">
-		                <span aria-hidden="true">&raquo;</span>
-		            </a>
-		        </li>{% endif %}
+		        {% if page < pages %}
+					<li>
+						<a href="{{ '/latest/%d' | format(page + 1) | path }}"
+						   class="btn-floating grey" aria-label="Next">
+							<span aria-hidden="true">&raquo;</span>
+						</a>
+		        	</li>
+				{% endif %}
 		    </ul>
 		{% endif %}
 	</div>

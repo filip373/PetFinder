@@ -1,18 +1,34 @@
 package com.petfinder.service;
 
-import com.petfinder.dao.*;
-import com.petfinder.domain.*;
-import com.petfinder.controller.AdvertisementController;
+import java.io.File;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.annotation.PostConstruct;
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import com.petfinder.dao.AdvertisementRepository;
+import com.petfinder.dao.AttachmentRepository;
+import com.petfinder.dao.LocationRepository;
+import com.petfinder.dao.PetCategoryRepository;
+import com.petfinder.dao.PetRepository;
+import com.petfinder.dao.TagRepository;
+import com.petfinder.dao.UserRepository;
+import com.petfinder.domain.Advertisement;
+import com.petfinder.domain.Attachment;
+import com.petfinder.domain.Location;
+import com.petfinder.domain.Pet;
+import com.petfinder.domain.PetCategory;
+import com.petfinder.domain.Tag;
+import com.petfinder.domain.User;
 import com.petfinder.exception.UserDoesNotHavePermissionToAdvertisemntException;
-import java.io.File;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
+import com.petfinder.rest.domain.SearchResults;
 
 @Service
 public class AdvertisementService {
@@ -70,7 +86,7 @@ public class AdvertisementService {
         long pages = advertisementRepository.count();
         return (long) Math.ceil(pages / perPage);
     }
-
+    
     @Transactional
     public void newAdvertisement(String title, String content, String petName, Integer age, String race, String categoryName, String voivodership, String commune, String place, List<Tag> tags, List<Attachment> attachments) {
         User user = userRepository.findOneByLogin(userService.getLoggedUserName());
@@ -106,7 +122,7 @@ public class AdvertisementService {
     }
 
     @Transactional
-    public List<Advertisement> getSearchedAdvertisements(
+    public SearchResults getSearchedAdvertisements(
             int page,
             int perPage,
             String adInfo,
@@ -128,7 +144,7 @@ public class AdvertisementService {
         );
         List<Tag> tags = tagRepository.findByNameContaining(tagInfo);
         List<Advertisement> advertisements = advertisementRepository
-                .findByPetInAndTitleContainingAndLocationInAndTagsIn(
+                .findDistinctByPetInAndTitleContainingAndLocationInAndTagsIn(
                         pets,
                         adInfo,
                         locations,
@@ -143,7 +159,15 @@ public class AdvertisementService {
             advertisement.getTags().size();
             advertisement.getUser();
         }
-        return advertisements;
+        int allResultsCounts = advertisementRepository
+                .findDistinctByPetInAndTitleContainingAndLocationInAndTagsIn(
+                        pets,
+                        adInfo,
+                        locations,
+                        tags
+                ).size();
+        
+        return new SearchResults(advertisements, (int)allResultsCounts);
     }
 
     public Advertisement getToEditAdvertisement(Long id) throws UserDoesNotHavePermissionToAdvertisemntException {
@@ -211,22 +235,22 @@ public class AdvertisementService {
 
     @PostConstruct
     private void setDatabase() {
-        PetCategory dog = new PetCategory("Psy");
-        PetCategory cat = new PetCategory("Koty");
-        PetCategory mammal = new PetCategory("Inne saaki");
-        PetCategory bird = new PetCategory("Ptaki");
-        PetCategory reptile = new PetCategory("Gady");
-        PetCategory amphibian = new PetCategory("Płazy");
-        PetCategory fish = new PetCategory("Ryby");
-        PetCategory other = new PetCategory("Inne");
-        petCategoryRepository.save(dog);
-        petCategoryRepository.save(cat);
-        petCategoryRepository.save(mammal);
-        petCategoryRepository.save(bird);
-        petCategoryRepository.save(reptile);
-        petCategoryRepository.save(amphibian);
-        petCategoryRepository.save(fish);
-        petCategoryRepository.save(other);
+//        PetCategory dog = new PetCategory("Psy");
+//        PetCategory cat = new PetCategory("Koty");
+//        PetCategory mammal = new PetCategory("Inne saaki");
+//        PetCategory bird = new PetCategory("Ptaki");
+//        PetCategory reptile = new PetCategory("Gady");
+//        PetCategory amphibian = new PetCategory("Płazy");
+//        PetCategory fish = new PetCategory("Ryby");
+//        PetCategory other = new PetCategory("Inne");
+//        petCategoryRepository.save(dog);
+//        petCategoryRepository.save(cat);
+//        petCategoryRepository.save(mammal);
+//        petCategoryRepository.save(bird);
+//        petCategoryRepository.save(reptile);
+//        petCategoryRepository.save(amphibian);
+//        petCategoryRepository.save(fish);
+//        petCategoryRepository.save(other);
 
     }
 
