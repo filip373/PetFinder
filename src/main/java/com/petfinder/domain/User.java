@@ -28,6 +28,9 @@ public class User extends AbstractPersistable<Long> implements Serializable {
 	@Column(name = "isBanned", nullable = false)
     private boolean isBanned;
 	
+	@Column(name = "emailNotification", nullable = false)
+    private boolean emailNotification;
+	
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "registrationDate", nullable = false)
     private Date registrationDate;
@@ -53,6 +56,7 @@ public class User extends AbstractPersistable<Long> implements Serializable {
     	this.password=password;
     	this.isBanned = false;
     	this.isActivated = false;
+    	this.emailNotification = false;
     	this.registrationDate = new Date();
         this.advertisements = new ArrayList<>();
         this.pets = new ArrayList<>();
@@ -96,6 +100,14 @@ public class User extends AbstractPersistable<Long> implements Serializable {
 
 	public void setBanned(boolean isBanned) {
 		this.isBanned = isBanned;
+	}
+
+	public boolean isEmailNotification() {
+		return emailNotification;
+	}
+
+	public void setEmailNotification(boolean emailNotification) {
+		this.emailNotification = emailNotification;
 	}
 
 	public Date getRegistrationDate() {
