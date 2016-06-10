@@ -25,6 +25,12 @@ public class UserService {
 	private UserRepository userRepository;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Transactional
+	public User getLoggedUser(){
+        String login = SecurityContextHolder.getContext().getAuthentication().getName();
+		return userRepository.findOneByLogin(login);
+	}
 
     @Transactional
     public void register(String login, String password, String repeatPassword,
@@ -68,6 +74,17 @@ public class UserService {
 			} else{
 				throw new InvalidUserPasswordException("User's password is invalid.");
 			}
+		}
+	}
+	
+	@Transactional
+	public void changeEmailNotificationValue(boolean emailNotification){
+		if(checkIfUserIsLogged()){
+	        String login = SecurityContextHolder.getContext().getAuthentication().getName();
+			User user = userRepository.findOneByLogin(login);
+			
+			user.setEmailNotification(emailNotification);
+			userRepository.save(user);
 		}
 	}
 	

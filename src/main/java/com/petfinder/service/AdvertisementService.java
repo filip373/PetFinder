@@ -6,7 +6,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +26,9 @@ import com.petfinder.domain.Pet;
 import com.petfinder.domain.PetCategory;
 import com.petfinder.domain.Tag;
 import com.petfinder.domain.User;
+import com.petfinder.exception.NoUsersToNotifyException;
 import com.petfinder.exception.UserDoesNotHavePermissionToAdvertisemntException;
+import com.petfinder.rest.domain.EmailSender;
 import com.petfinder.rest.domain.SearchResults;
 
 @Service
@@ -88,7 +89,7 @@ public class AdvertisementService {
     }
     
     @Transactional
-    public void newAdvertisement(String title, String content, String petName, Integer age, String race, String categoryName, String voivodership, String commune, String place, List<Tag> tags, List<Attachment> attachments) {
+    public Advertisement newAdvertisement(String title, String content, String petName, Integer age, String race, String categoryName, String voivodership, String commune, String place, List<Tag> tags, List<Attachment> attachments) {
         User user = userRepository.findOneByLogin(userService.getLoggedUserName());
         PetCategory petCategory = petCategoryRepository.findOne(Long.parseLong(categoryName));
         Pet pet = setPetForAdvertisement(petName, race, petCategory, user, age);
@@ -97,6 +98,8 @@ public class AdvertisementService {
         Advertisement advertisement = new Advertisement(title, content, user, pet, location, tags, attachments);
         advertisement = setAtachment(attachments, title, content, user, pet, location, tags, advertisement);
         advertisementRepository.save(advertisement);
+        
+        return advertisement;
     }
 
     private Advertisement setAtachment(List<Attachment> attachments, String title, String content, User user, Pet pet, Location location, List<Tag> tags, Advertisement advertisement) {
@@ -232,6 +235,25 @@ public class AdvertisementService {
         }
         return pet;
     }
+    
+	@Transactional
+	public List<User> getUsersToNotify() throws NoUsersToNotifyException {
+
+		if(userRepository.getUsersToNotify()!=null){
+			return userRepository.getUsersToNotify();
+		}
+		
+		throw new NoUsersToNotifyException("Users to notify were not found.");
+	}
+	
+	
+	public void sendEmailNotification(Advertisement advertisement) throws NoUsersToNotifyException{
+		List<User> usersToNotify = getUsersToNotify();
+		
+		EmailSender es = new EmailSender(usersToNotify,advertisement);
+		Thread t = new Thread(es);
+		t.start();
+	}
 
     @PostConstruct
     private void setDatabase() {
