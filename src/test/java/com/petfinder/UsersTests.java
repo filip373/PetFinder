@@ -1,6 +1,7 @@
 package com.petfinder;
 
 import com.petfinder.dao.UserRepository;
+import com.petfinder.domain.User;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,12 +9,14 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -24,8 +27,9 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
  * Created by Filip-PC on 18.06.2016.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
+@WebAppConfiguration()
 @SpringApplicationConfiguration(PetFinderApplication.class)
+@TestPropertySource(locations = "classpath:test.properties")
 public class UsersTests {
     @Autowired
     private WebApplicationContext context;
@@ -38,10 +42,10 @@ public class UsersTests {
     @Before
     public void setup() {
         this.mockMvc = webAppContextSetup(this.context).build();
+        userRepository.deleteAll();
     }
 
-    @Test
-    // case 1
+    @Test // case 1
     public void shouldAddRegisteredUserToDatabase() throws Exception {
         this.mockMvc.perform(post("/register")
                 .param("login", "test_login").param("password", "test_password")
@@ -55,5 +59,20 @@ public class UsersTests {
         assertThat(userRepository.findOneByEmail("test@email.com")).matches(user ->
                 user.getLogin().equals("test_login") &&
                         new BCryptPasswordEncoder().matches("test_password", user.getPassword()));
+    }
+
+    @Test // case 2
+    public void shouldNotAddUser_IfLoginAlreadyTaken() throws Exception {
+        userRepository.save(new User("some_login", "email@email.com", "some_password"));
+        long countBefore = userRepository.count();
+        this.mockMvc.perform(post("/register")
+                .param("login", "some_login").param("password", "test_password")
+                .param("repeatPassword", "test_password").param("email", "test@email.com")
+                .accept("text/html;charset=UTF-8"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("text/html;charset=UTF-8"))
+                .andExpect(content()
+                        .string(Matchers.containsString("User 'some_login' already exists.")));
+        assertEquals(countBefore, userRepository.count());
     }
 }
