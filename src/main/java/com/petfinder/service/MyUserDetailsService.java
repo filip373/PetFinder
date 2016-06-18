@@ -31,10 +31,8 @@ public class MyUserDetailsService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(final String username) 
 		throws UsernameNotFoundException {
-		LOGGER.log(Level.SEVERE,username);
 		com.petfinder.domain.User  user = userDao.findOneByLogin(username);
 		List<GrantedAuthority> authorities = buildUserAuthority();
-		LOGGER.log(Level.SEVERE,user.getLogin());
 		return buildUserForAuthentication(user, authorities);
 		
 	}
