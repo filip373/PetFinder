@@ -27,11 +27,14 @@ public class User extends AbstractPersistable<Long> implements Serializable {
 	
 	@Column(name = "isBanned", nullable = false)
     private boolean isBanned;
-	
+
 	@Column(name = "emailNotification", nullable = false)
     private boolean emailNotification;
-	
-    @Temporal(TemporalType.TIMESTAMP)
+
+	@Column(name = "role", nullable = false)
+	private String role;
+
+	@Temporal(TemporalType.TIMESTAMP)
     @Column(name = "registrationDate", nullable = false)
     private Date registrationDate;
     
@@ -60,6 +63,7 @@ public class User extends AbstractPersistable<Long> implements Serializable {
     	this.registrationDate = new Date();
         this.advertisements = new ArrayList<>();
         this.pets = new ArrayList<>();
+		this.role = "USER";
     }
 
 	public String getLogin() {
@@ -144,10 +148,14 @@ public class User extends AbstractPersistable<Long> implements Serializable {
     
     public String getRole()
     {
-    	return "ROLE_USER";
+    	return role;
     }
 
-    @Override
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	@Override
     public String toString() {
         return String.format(
                 "User<#%d, login=%s, email=%s, isActivated=%b, isBanned=%b>",

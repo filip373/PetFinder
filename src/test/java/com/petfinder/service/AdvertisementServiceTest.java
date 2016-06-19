@@ -29,7 +29,7 @@ import static org.mockito.Mockito.*;
 public class AdvertisementServiceTest {
 
     @Spy
-    private AdvertisementService advertisementService = new AdvertisementService();
+    private AdvertisementService advertisementService;
 
     @Mock
     private AdvertisementRepository advertisementRepository;
@@ -54,6 +54,7 @@ public class AdvertisementServiceTest {
 
     @Before
     public void setUp() throws Exception {
+        advertisementService = new AdvertisementService();
         advertisementService.advertisementRepository = advertisementRepository;
         advertisementService.userRepository = userRepository;
         advertisementService.userService = userService;
@@ -63,7 +64,7 @@ public class AdvertisementServiceTest {
         advertisementService.petCategoryRepository = petCategoryRepository;
     }
 
-    // #9 test case
+    // #7 test case
     @Test
     public void shouldGetAllAdvertisements() throws Exception {
         List<Advertisement> adList = new ArrayList<>();
@@ -89,7 +90,80 @@ public class AdvertisementServiceTest {
         assertThat(advertisements.get(2).getTitle(), is(title3));
     }
 
-    // #17 test case
+    // #11 test case
+    @Test
+    public void shouldEditAnyAdvertisementAsModerator() throws Exception {
+        User user = new User();
+        user.setLogin("login");
+        User moderator = new User();
+        moderator.setLogin("moderator");
+        moderator.setRole("MODERATOR");
+        Advertisement old = new Advertisement("title", "content", user, new Pet(), new Location(), new ArrayList<>(), new ArrayList<>());
+        Long id = 1l;
+        String title = "title2";
+        String content = "content2";
+        String name = "name";
+        int age = 4;
+        String race = "black";
+        String categoryName = "1";
+        String voivodership = "voivodership";
+        String commune = "commune";
+        String place = "place";
+        List<Tag> tags = new ArrayList<>();
+        Tag tag = new Tag("2");
+        String tagName = "tag";
+        tag.setName(tagName);
+        tags.add(tag);
+        PetCategory petCategory = new PetCategory();
+        Pet pet = new Pet();
+        pet.setName(name);
+        Location location = new Location();
+        List<Attachment> attachments = new ArrayList<>();
+        when(advertisementRepository.findOne(id)).thenReturn(old);
+        when(userService.getLoggedUser()).thenReturn(moderator);
+        when(petCategoryRepository.findOne(Long.parseLong(categoryName))).thenReturn(petCategory);
+        when(petRepository.findByNameAndRaceAndCategoryAndOwner(eq(name), eq(race), eq(petCategory), eq(user))).thenReturn(new ArrayList<Pet>(){{add(pet);}});
+        when(locationRepository.findByVoivodershipAndPlaceAndCommune(eq(voivodership), eq(place), eq(commune))).thenReturn(new ArrayList<Location>(){{add(location);}});
+        when(tagRepository.findOneByName(tagName)).thenReturn(tag);
+        ArgumentCaptor<Advertisement> captor = ArgumentCaptor.forClass(Advertisement.class);
+
+        advertisementService.editAdvertisement(id, title, content, name, age, race, categoryName, voivodership, commune, place, tags, attachments);
+
+        verify(advertisementRepository, times(1)).save(any(Advertisement.class));
+        verify(advertisementRepository).save(captor.capture());
+        assertThat(captor.getValue().getTitle(), is(title));
+        assertThat(captor.getValue().getContent(), is(content));
+        assertThat(captor.getValue().getTitle(), is(title));
+        assertThat(captor.getValue().getPet().getName(), is(pet.getName()));
+        assertThat(captor.getValue().getLocation(), is(location));
+        assertThat(captor.getValue().getTags(), is(tags));
+        assertThat(captor.getValue().getUser(), is(user));
+        assertThat(captor.getValue().getAttachments(), is(attachments));
+    }
+
+    // #12 test case
+    @Test
+    public void shouldDeleteAnyAdvertisementAsModerator() throws Exception {
+        Long advertisementId = 1l;
+        User user = new User();
+        user.setLogin("login");
+        User moderator = new User();
+        moderator.setLogin("moderator");
+        moderator.setRole("MODERATOR");
+        String title = "title";
+        Advertisement advertisement = new Advertisement(title, null, user, new Pet(), new Location(), new ArrayList<>(), new ArrayList<>());
+        when(advertisementRepository.findOne(advertisementId)).thenReturn(advertisement);
+        when(userService.getLoggedUser()).thenReturn(moderator);
+        ArgumentCaptor<Advertisement> captor = ArgumentCaptor.forClass(Advertisement.class);
+
+        advertisementService.deleteAdvertisement(advertisementId);
+
+        verify(advertisementRepository, times(1)).delete(any(Advertisement.class));
+        verify(advertisementRepository).delete(captor.capture());
+        assertThat(captor.getValue().getTitle(), is(title));
+    }
+
+    // #13 test case
     @Test
     public void shouldAddNewAdvertisement() throws Exception {
         String title = "title";
@@ -133,7 +207,7 @@ public class AdvertisementServiceTest {
         assertThat(captor.getValue().getAttachments(), is(attachments));
     }
 
-    // #18 test case
+    // #14 test case
     @Test(expected = NumberFormatException.class)
     public void shouldNotAddNewAdvertisementWhenCategoryInvalid() throws Exception {
         String title = "title";
@@ -165,7 +239,7 @@ public class AdvertisementServiceTest {
         advertisementService.newAdvertisement(title, content, name, age, race, categoryName, voivodership, commune, place, tags, attachments);
     }
 
-    // #19 test case
+    // #15 test case
     @Test
     public void shouldEditAdvertisement() throws Exception {
         User user = new User();
@@ -214,7 +288,7 @@ public class AdvertisementServiceTest {
         assertThat(captor.getValue().getAttachments(), is(attachments));
     }
 
-    // #20 test case
+    // #16 test case
     @Test(expected = NumberFormatException.class)
     public void shouldNotEditAdvertisementWhenCategoryInvalid() throws Exception {
         User user = new User();
@@ -251,7 +325,7 @@ public class AdvertisementServiceTest {
         advertisementService.editAdvertisement(id, title, content, name, age, race, categoryName, voivodership, commune, place, tags, attachments);
     }
 
-    // #21 test case
+    // #17 test case
     @Test
     public void shouldDeleteAdvertisement() throws Exception {
         Long advertisementId = 1l;
@@ -271,13 +345,16 @@ public class AdvertisementServiceTest {
         assertThat(captor.getValue().getTitle(), is(title));
     }
 
-    // #22 test case
+    // #18 test case
     @Test(expected = UserDoesNotHavePermissionToAdvertisementException.class)
     public void shouldNotEditAdvertisementOfOtherUser() throws Exception {
         User userOwner = new User();
         userOwner.setLogin("user");
+        userOwner.setRole("USER");
         Advertisement old = new Advertisement("title", "content", userOwner, new Pet(), new Location(), new ArrayList<>(), new ArrayList<>());
-        String editorLogin = "user2";
+        User editor = new User();
+        editor.setLogin("user2");
+        editor.setRole("USER");
         Long id = 1l;
         String title = "title2";
         String content = "content2";
@@ -298,22 +375,26 @@ public class AdvertisementServiceTest {
         List<Attachment> attachments = new ArrayList<>();
 
         when(advertisementRepository.findOne(id)).thenReturn(old);
-        when(userService.getLoggedUserName()).thenReturn(editorLogin);
+        when(userService.getLoggedUserName()).thenReturn(editor.getLogin());
+        when(userService.getLoggedUser()).thenReturn(editor);
 
         advertisementService.editAdvertisement(id, title, content, name, age, race, categoryName, voivodership, commune, place, tags, attachments);
     }
 
-    // #23 test case
+    // #19 test case
     @Test(expected = UserDoesNotHavePermissionToAdvertisementException.class)
     public void shouldNotDeleteAdvertisementOfOtherUser() throws Exception {
         Long advertisementId = 1l;
         User owner = new User();
         String ownerlogin = "owner";
         owner.setLogin(ownerlogin);
-        String otherLogin = "other";
+        User editor = new User();
+        editor.setLogin("user2");
+        editor.setRole("USER");
         Advertisement advertisement = new Advertisement(null, null, owner, new Pet(), new Location(), new ArrayList<>(), new ArrayList<>());
         when(advertisementRepository.findOne(advertisementId)).thenReturn(advertisement);
-        when(userService.getLoggedUserName()).thenReturn(otherLogin);
+        when(userService.getLoggedUserName()).thenReturn(editor.getLogin());
+        when(userService.getLoggedUser()).thenReturn(editor);
 
         advertisementService.deleteAdvertisement(advertisementId);
     }

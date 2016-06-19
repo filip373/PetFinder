@@ -190,7 +190,9 @@ public class AdvertisementService {
         Advertisement advertisement = advertisementRepository.findOne(id);
         if (advertisement != null) {
             if (advertisement.getUser() == null || !advertisement.getUser().getLogin().equals(userService.getLoggedUserName())) {
-                throw new UserDoesNotHavePermissionToAdvertisementException("User does not have permission to advertisemnt");
+                if(!userService.getLoggedUser().getRole().equals("MODERATOR")) {
+                    throw new UserDoesNotHavePermissionToAdvertisementException("User does not have permission to advertisemnt");
+                }
             }
             advertisement.setTitle(title);
             advertisement.setContent(content);
@@ -216,7 +218,9 @@ public class AdvertisementService {
         Advertisement advertisement = advertisementRepository.findOne(id);
         if (advertisement != null) {
             if (advertisement.getUser() == null || !advertisement.getUser().getLogin().equals(userService.getLoggedUserName())) {
-                throw new UserDoesNotHavePermissionToAdvertisementException("User does not have permission to advertisemnt");
+                if(!userService.getLoggedUser().getRole().equals("MODERATOR")) {
+                    throw new UserDoesNotHavePermissionToAdvertisementException("User does not have permission to advertisemnt");
+                }
             }
             advertisementRepository.delete(advertisement);
         }

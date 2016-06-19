@@ -96,7 +96,7 @@ public class UsersTests {
         assertEquals(countBefore, userRepository.count());
     }
 
-    @Test // case 5
+    @Test // case 4
     public void shouldLogIn() throws Exception {
         User created = addUser();
         this.mockMvc.perform(post("/login").with(csrf()).param("username", created.getLogin())
@@ -106,7 +106,7 @@ public class UsersTests {
                 .andExpect(authenticated());
     }
 
-    @Test // case 6
+    @Test // case 5
     public void shouldNotLogIn_WithWrongPassword() throws Exception {
         User created = addUser();
         this.mockMvc.perform(post("/login").with(csrf()).param("username", created.getLogin())
@@ -116,7 +116,7 @@ public class UsersTests {
                 .andExpect(unauthenticated());
     }
 
-    @Test // case 7
+    @Test // case 6
     public void shouldNotLogIn_WithWrongUsername() throws Exception {
         User created = addUser();
         this.mockMvc.perform(post("/login").with(csrf()).param("username", created.getLogin() + "tgdfsf4fwfsdf")

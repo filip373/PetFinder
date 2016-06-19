@@ -32,7 +32,7 @@ public class AdvertisementDatabaseIT {
     @Autowired
     private UserRepository userRepository;
 
-    // case #10
+    // case #8
     @Test
     public void shouldFilterAdvertisementsByTitle() throws Exception {
         List<Advertisement> advertisements = advertisementRepository.findByTitleContaining("POMOCY");
@@ -43,7 +43,7 @@ public class AdvertisementDatabaseIT {
         }
     }
 
-    // case #11
+    // case #9
     @Test
     public void shouldFilterAdvertisementsByLocation() throws Exception {
         Location location = locationRepository.findByVoivodership("Szczecin").get(0);
@@ -53,7 +53,7 @@ public class AdvertisementDatabaseIT {
         assertThat(advertisements.size(), is(2));
     }
 
-    // case #12
+    // case #10
     @Test
     public void shouldFilterAdvertisementsByUser() throws Exception {
         User user = userRepository.findOneByLogin("user1");

@@ -15,9 +15,9 @@ INSERT INTO categories VALUES (6, 'Płazy');
 INSERT INTO categories VALUES (7, 'Ryby');
 INSERT INTO categories VALUES (8, 'Inne');
 -- password for all users: password
-INSERT INTO users VALUES (9, 'user1@petfinder.com', false, true, false, '2016-05-30 17:03:39.24', 'user1', '$2a$06$Ti9Ttifv7CeHhFNCMt8JIO8DkkrAfUmOA1Y0bGSlBb7RVe1Ie/mU.', '2016-05-30 16:03:39.24');
-INSERT INTO users VALUES (10, 'user2@petfinder.com', false, true, false, '2016-05-30 17:03:39.24', 'user2', '$2a$06$Ti9Ttifv7CeHhFNCMt8JIO8DkkrAfUmOA1Y0bGSlBb7RVe1Ie/mU.', '2016-05-30 16:03:39.24');
-INSERT INTO users VALUES (11, 'user3@petfinder.com', false, true, false, '2016-05-30 17:03:39.24', 'user3', '$2a$06$Ti9Ttifv7CeHhFNCMt8JIO8DkkrAfUmOA1Y0bGSlBb7RVe1Ie/mU.', '2016-05-30 16:03:39.24');
+INSERT INTO users VALUES (9, 'user1@petfinder.com', false, true, false, '2016-05-30 17:03:39.24', 'user1', '$2a$06$Ti9Ttifv7CeHhFNCMt8JIO8DkkrAfUmOA1Y0bGSlBb7RVe1Ie/mU.', '2016-05-30 16:03:39.24', 'USER');
+INSERT INTO users VALUES (10, 'user2@petfinder.com', false, true, false, '2016-05-30 17:03:39.24', 'user2', '$2a$06$Ti9Ttifv7CeHhFNCMt8JIO8DkkrAfUmOA1Y0bGSlBb7RVe1Ie/mU.', '2016-05-30 16:03:39.24', 'USER');
+INSERT INTO users VALUES (11, 'user3@petfinder.com', false, true, false, '2016-05-30 17:03:39.24', 'user3', '$2a$06$Ti9Ttifv7CeHhFNCMt8JIO8DkkrAfUmOA1Y0bGSlBb7RVe1Ie/mU.', '2016-05-30 16:03:39.24', 'MODERATOR');
 INSERT INTO pets VALUES (12, 7, 'Azor', 'Goryl', 7, 11);
 INSERT INTO pets VALUES (13, 6, 'Azor', 'Syjamski', 8, 11);
 INSERT INTO pets VALUES (14, 12, 'Filemon', 'Słoń Afrykański', 6, 11);
