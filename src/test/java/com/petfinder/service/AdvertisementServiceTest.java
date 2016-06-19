@@ -3,9 +3,7 @@ package com.petfinder.service;
 import com.petfinder.PetFinderApplication;
 import com.petfinder.dao.*;
 import com.petfinder.domain.*;
-import com.petfinder.exception.UserDoesNotHavePermissionToAdvertisemntException;
-import com.sun.mail.iap.Argument;
-import com.sun.org.apache.xpath.internal.operations.Bool;
+import com.petfinder.exception.UserDoesNotHavePermissionToAdvertisementException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,12 +11,10 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -251,13 +247,32 @@ public class AdvertisementServiceTest {
         when(petRepository.findByNameAndRaceAndCategoryAndOwner(eq(name), eq(race), eq(petCategory), eq(user))).thenReturn(new ArrayList<Pet>(){{add(pet);}});
         when(locationRepository.findByVoivodershipAndPlaceAndCommune(eq(voivodership), eq(place), eq(commune))).thenReturn(new ArrayList<Location>(){{add(location);}});
         when(tagRepository.findOneByName(tagName)).thenReturn(tag);
-        ArgumentCaptor<Advertisement> captor = ArgumentCaptor.forClass(Advertisement.class);
 
         advertisementService.editAdvertisement(id, title, content, name, age, race, categoryName, voivodership, commune, place, tags, attachments);
     }
 
+    // #21 test case
+    @Test
+    public void shouldDeleteAdvertisement() throws Exception {
+        Long advertisementId = 1l;
+        User user = new User();
+        String login = "user";
+        user.setLogin(login);
+        String title = "title";
+        Advertisement advertisement = new Advertisement(title, null, user, new Pet(), new Location(), new ArrayList<>(), new ArrayList<>());
+        when(advertisementRepository.findOne(advertisementId)).thenReturn(advertisement);
+        when(userService.getLoggedUserName()).thenReturn(login);
+        ArgumentCaptor<Advertisement> captor = ArgumentCaptor.forClass(Advertisement.class);
+
+        advertisementService.deleteAdvertisement(advertisementId);
+
+        verify(advertisementRepository, times(1)).delete(any(Advertisement.class));
+        verify(advertisementRepository).delete(captor.capture());
+        assertThat(captor.getValue().getTitle(), is(title));
+    }
+
     // #22 test case
-    @Test(expected = UserDoesNotHavePermissionToAdvertisemntException.class)
+    @Test(expected = UserDoesNotHavePermissionToAdvertisementException.class)
     public void shouldNotEditAdvertisementOfOtherUser() throws Exception {
         User userOwner = new User();
         userOwner.setLogin("user");
@@ -286,5 +301,20 @@ public class AdvertisementServiceTest {
         when(userService.getLoggedUserName()).thenReturn(editorLogin);
 
         advertisementService.editAdvertisement(id, title, content, name, age, race, categoryName, voivodership, commune, place, tags, attachments);
+    }
+
+    // #23 test case
+    @Test(expected = UserDoesNotHavePermissionToAdvertisementException.class)
+    public void shouldNotDeleteAdvertisementOfOtherUser() throws Exception {
+        Long advertisementId = 1l;
+        User owner = new User();
+        String ownerlogin = "owner";
+        owner.setLogin(ownerlogin);
+        String otherLogin = "other";
+        Advertisement advertisement = new Advertisement(null, null, owner, new Pet(), new Location(), new ArrayList<>(), new ArrayList<>());
+        when(advertisementRepository.findOne(advertisementId)).thenReturn(advertisement);
+        when(userService.getLoggedUserName()).thenReturn(otherLogin);
+
+        advertisementService.deleteAdvertisement(advertisementId);
     }
 }

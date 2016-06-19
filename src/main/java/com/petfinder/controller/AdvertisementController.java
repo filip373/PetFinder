@@ -19,7 +19,7 @@ import com.petfinder.domain.Location;
 import com.petfinder.domain.Pet;
 import com.petfinder.domain.PetCategory;
 import com.petfinder.exception.NoUsersToNotifyException;
-import com.petfinder.exception.UserDoesNotHavePermissionToAdvertisemntException;
+import com.petfinder.exception.UserDoesNotHavePermissionToAdvertisementException;
 import com.petfinder.rest.domain.SearchResults;
 
 import java.io.BufferedOutputStream;
@@ -194,7 +194,7 @@ public class AdvertisementController {
                 try {
                     advertisementService.editAdvertisement(id, title, content, petName, age, race, categoryName, voivodership, commune, place, tags, attachments);
                     model.addAttribute("statusOK", "Advertisement has been edited successfully.");
-                } catch (UserDoesNotHavePermissionToAdvertisemntException e) {
+                } catch (UserDoesNotHavePermissionToAdvertisementException e) {
                     LOGGER.log(Level.SEVERE, "UserDoesNotHavePermissionToAdvertisemntException is returned");
                     model.addAttribute("status", e.getMessage());
                 }
@@ -259,7 +259,7 @@ public class AdvertisementController {
             model.addAttribute("categories", advertisementService.getAllCategories());
             model.addAttribute("files", advertisementService.getAttachmentNameForAdvertisement(id));
             model.addAttribute("addId", id);
-        } catch (UserDoesNotHavePermissionToAdvertisemntException e) {
+        } catch (UserDoesNotHavePermissionToAdvertisementException e) {
             LOGGER.log(Level.SEVERE, "UserDoesNotHavePermissionToAdvertisemntException is returned");
             model.addAttribute("status", e.getMessage());
         }

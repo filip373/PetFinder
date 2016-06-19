@@ -27,7 +27,7 @@ import com.petfinder.domain.PetCategory;
 import com.petfinder.domain.Tag;
 import com.petfinder.domain.User;
 import com.petfinder.exception.NoUsersToNotifyException;
-import com.petfinder.exception.UserDoesNotHavePermissionToAdvertisemntException;
+import com.petfinder.exception.UserDoesNotHavePermissionToAdvertisementException;
 import com.petfinder.rest.domain.EmailSender;
 import com.petfinder.rest.domain.SearchResults;
 
@@ -173,10 +173,10 @@ public class AdvertisementService {
         return new SearchResults(advertisements, (int)allResultsCounts);
     }
 
-    public Advertisement getToEditAdvertisement(Long id) throws UserDoesNotHavePermissionToAdvertisemntException {
+    public Advertisement getToEditAdvertisement(Long id) throws UserDoesNotHavePermissionToAdvertisementException {
         Advertisement advertisement = advertisementRepository.findOne(id);
         if (advertisement.getUser() == null || advertisement.getUser().equals(userService.getLoggedUserName())) {
-            throw new UserDoesNotHavePermissionToAdvertisemntException("User does not have permission to advertisemnt");
+            throw new UserDoesNotHavePermissionToAdvertisementException("User does not have permission to advertisemnt");
         }
         advertisement.getAttachments().size();
         advertisement.getContent();
@@ -186,11 +186,11 @@ public class AdvertisementService {
         return advertisement;
     }
 
-    public Advertisement editAdvertisement(Long id, String title, String content, String petName, Integer age, String race, String categoryName, String voivodership, String commune, String place, List<Tag> tags, List<Attachment> attachments) throws UserDoesNotHavePermissionToAdvertisemntException {
+    public Advertisement editAdvertisement(Long id, String title, String content, String petName, Integer age, String race, String categoryName, String voivodership, String commune, String place, List<Tag> tags, List<Attachment> attachments) throws UserDoesNotHavePermissionToAdvertisementException {
         Advertisement advertisement = advertisementRepository.findOne(id);
         if (advertisement != null) {
-            if (advertisement.getUser() == null || advertisement.getUser().equals(userService.getLoggedUserName())) {
-                throw new UserDoesNotHavePermissionToAdvertisemntException("User does not have permission to advertisemnt");
+            if (advertisement.getUser() == null || !advertisement.getUser().getLogin().equals(userService.getLoggedUserName())) {
+                throw new UserDoesNotHavePermissionToAdvertisementException("User does not have permission to advertisemnt");
             }
             advertisement.setTitle(title);
             advertisement.setContent(content);
@@ -207,6 +207,18 @@ public class AdvertisementService {
             advertisement = setAtachment(attachments, title, content, user, pet, location, tags, advertisement);
 
             advertisementRepository.save(advertisement);
+        }
+
+        return advertisement;
+    }
+
+    public Advertisement deleteAdvertisement(Long id) throws UserDoesNotHavePermissionToAdvertisementException {
+        Advertisement advertisement = advertisementRepository.findOne(id);
+        if (advertisement != null) {
+            if (advertisement.getUser() == null || !advertisement.getUser().getLogin().equals(userService.getLoggedUserName())) {
+                throw new UserDoesNotHavePermissionToAdvertisementException("User does not have permission to advertisemnt");
+            }
+            advertisementRepository.delete(advertisement);
         }
 
         return advertisement;
